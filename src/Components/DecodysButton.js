@@ -22,9 +22,10 @@ const DecodysButton = props => {
   } else {
     return (
       <TouchableOpacity
+       disabled={props.disabled}
         onPress={props.buttonFunction}
         style={{
-          width: '80%',
+          width: '100%',
           height: 52,
           backgroundColor: props.bgcolor,
           borderRadius: 25,

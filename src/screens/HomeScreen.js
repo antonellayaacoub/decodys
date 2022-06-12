@@ -42,7 +42,7 @@ const HomeScreen = () => {
   const startRecording = async () => {
     setLoading(true);
     try {
-      await Voice.start('en-Us');
+      await Voice.start('ar_EG');
     } catch (error) {
       console.log('error raised', error);
     }
@@ -85,7 +85,7 @@ const HomeScreen = () => {
           style={{
             alignSelf: 'center',
             marginTop: 24,
-            backgroundColor: 'red',
+            backgroundColor: '#ff4444',
             padding: 8,
             borderRadius: 4,
           }}

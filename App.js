@@ -1,36 +1,44 @@
-import React from 'react';
+import React,{useEffect} from 'react'
+import Main from './src/Main'
+import { Provider } from 'react-redux';
+import { store } from './src/CreateStore';
+import {Root} from 'native-base';
+import { COLORS } from "./src/constants";
+
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {StatusBar} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
+
 import SplashScreen from 'react-native-lottie-splash-screen';
-import {createDrawerNavigator} from '@react-navigation/drawer';
 
-import LoginScreen from './src/screens/LoginScreen';
-import RegistrationScreen from './src/screens/RegistrationScreen';
+AntDesign.loadFont().then();
+Ionicons.loadFont().then();
+Feather.loadFont().then();
+MaterialIcons.loadFont().then()
 
-import HomeScreen from './src/screens/HomeScreen';
-import PatiensScreen from './src/screens/PatiensScreen';
 
-const Stack = createStackNavigator();
+// @TODO: This is to hide a Warning caused by NativeBase after upgrading to RN 0.62
+import { YellowBox } from 'react-native'
 
-const App = () => {
+
+YellowBox.ignoreWarnings([
+  'Animated: `useNativeDriver` was not specified. This is a required option and must be explicitly set to `true` or `false`',
+])
+// ------- END OF WARNING SUPPRESSION
+console.disableYellowBox = true;
+export default function App() {
+
   React.useEffect(() => {
     SplashScreen.hide(); // here
   }, []);
-  return (
-    <NavigationContainer>
-      <StatusBar backgroundColor={'#2A365D'} />
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-          animationEnabled: false,
-        }}>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Registration" component={RegistrationScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
 
-export default App;
+  return (
+    <Provider store={store}>
+      <Root>
+    <Main/>
+    </Root>
+    </Provider>
+  )
+}

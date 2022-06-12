@@ -46,7 +46,7 @@ const LoginScreen = ({navigation}) => {
 
   return (
     <>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
+      {/* <StatusBar backgroundColor="white" barStyle="dark-content" /> */}
       <View style={styles.body}>
         <View style={styles.topSection}>
           <Logo />
