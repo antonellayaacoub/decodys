@@ -1,17 +1,19 @@
-import React from 'react';
-import {Container} from 'native-base';
-import Header from './components/Header';
-import TestsForm from './components/TestsForm';
+import React from 'react'
+import { Container,Root } from 'native-base'
+import Header from './components/Header'
+import ItemList from './components/ItemList';
+
 
 export default function Tests() {
-  return (
-    <Container>
-      <Header
-        style={{
-          backgroundColor: '#0ACBC5',
-        }}
-      />
-      <TestsForm />
-    </Container>
-  );
+
+    
+
+    return (
+    
+        <Container>
+         <Header />
+         <ItemList/>
+        </Container>
+       
+    )
 }

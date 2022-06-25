@@ -29,7 +29,7 @@ import {styles} from '../styles';
 
 export default function ItemList(props) {
   const BUTTONS = [
-    {text: 'Conduct Test', icon: 'newspaper', iconColor: '#0ACBC5'},
+    {text: 'Tests', icon: 'newspaper', iconColor: '#0ACBC5'},
     {text: 'Patient Me', icon: 'md-person', iconColor: '#0ACBC5'},
     {text: 'Edit Patient', icon: 'image', iconColor: '#0ACBC5'},
     {text: 'Delete Patient', icon: 'trash', iconColor: '#6C7594'},
@@ -49,11 +49,11 @@ export default function ItemList(props) {
   const [refreshBool, setrefreshBool] = useState(false);
 
   const searchResponse = useSelector(
-    state => state.patientReducer.searchpatientState,
+    state => state.patientReducer.searchPatientState,
   );
 
   const deleteResponse = useSelector(
-    state => state.patientReducer.deletepatientResponse,
+    state => state.patientReducer.deletePatientResponse,
   );
 
   const [spinnerVisiblity, setSpinnerVisibility] = useState(false);
@@ -67,7 +67,7 @@ export default function ItemList(props) {
       console.log(props.props);
       setinitPager('1');
       setResponseData('');
-      dispatch(GetSearchpatientAction(props.props, '1'));
+      dispatch(GetSearchPatientAction(props.props, '1'));
     }
 
     return () => {};
@@ -79,7 +79,7 @@ export default function ItemList(props) {
   useFocusEffect(
     React.useCallback(() => {
       return () => {
-        dispatch(clearSearchpatientState());
+        dispatch(clearSearchPatientState());
       };
     }, []),
   );
@@ -161,7 +161,7 @@ export default function ItemList(props) {
             navigation.navigate('EditPatient', {
               patientId: patientId,
             });
-          } else if (BUTTONS[buttonIndex].text == 'Conduct Test') {
+          } else if (BUTTONS[buttonIndex].text == 'Tests') {
             navigation.navigate('Tests', {
               patientId: patientId,
             });

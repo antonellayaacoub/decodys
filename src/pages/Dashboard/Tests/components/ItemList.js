@@ -11,7 +11,7 @@ import {
   View,
 } from 'native-base';
 import {FlatList, ActivityIndicator, Alert} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation,useFocusEffect,useRoute} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import ContentLoader, {
   Rect,
@@ -20,31 +20,33 @@ import ContentLoader, {
   List as ListLoader,
 } from 'react-content-loader/native';
 import {
-  GetPatientActions,
-  DeletePatientAction,
-} from '../../../../store/actions/PatientsAction';
+  GetTestActions,
+  DeleteTestAction,
+} from '../../../../store/actions/TestsAction';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {styles} from '../styles';
 
 export default function ItemList() {
   const BUTTONS = [
-    {text: 'Tests', icon: 'newspaper', iconColor: '#0ACBC5'},
-    {text: 'Patient Me', icon: 'md-person', iconColor: '#0ACBC5'},
-    {text: 'Edit Patient', icon: 'image', iconColor: '#0ACBC5'},
-    {text: 'Delete Patient', icon: 'trash', iconColor: '#6C7594'},
+    {text: 'MiniTests', icon: 'newspaper', iconColor: '#0ACBC5'},
+    {text: 'Test', icon: 'md-person', iconColor: '#0ACBC5'},
+    {text: 'Delete Test', icon: 'trash', iconColor: '#6C7594'},
     {text: 'Cancel', icon: 'close', iconColor: '#6C7594'},
   ];
+
+  const routeParams = useRoute();
+  const { patientId } = routeParams.params;
 
   const CANCEL_INDEX = 3;
 
   const [refreshBool, setrefreshBool] = useState(false);
 
   const getResponse = useSelector(
-    state => state.patientReducer.getPatientState,
+    state => state.testReducer.getTestState,
   );
 
   const deleteResponse = useSelector(
-    state => state.patientReducer.deletePatientResponse,
+    state => state.testReducer.deleteTestResponse,
   );
 
   const [responseData, setResponseData] = useState([]);
@@ -62,7 +64,7 @@ export default function ItemList() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(GetPatientActions(initPager));
+    dispatch(GetTestActions(initPager, patientId));
 
     return () => {};
   }, []);
@@ -92,11 +94,11 @@ export default function ItemList() {
     if (initPager == 1 || totalItems < 16) {
     } else {
       setrefreshBool(true);
-      dispatch(GetPatientActions(initPager));
+      dispatch(GetTestActions(initPager, patientId));
     }
   };
 
-  const loadActionSheet = patientId => {
+  const loadActionSheet = testId => {
     return ActionSheet.show(
       {
         options: BUTTONS,
@@ -105,17 +107,21 @@ export default function ItemList() {
       },
       buttonIndex => {
         try {
-          if (BUTTONS[buttonIndex].text == 'Edit Patient') {
-            navigation.navigate('EditPatient', {
-              patientId: patientId,
+          if (BUTTONS[buttonIndex].text == 'Add Test') {
+           console.log('Test')
+           const data =  {
+            patient_id: patientId,
+            garde:0,
+          };
+
+           dispatch(CreateTestAction(data));
+          } else if (BUTTONS[buttonIndex].text == 'MiniTests') {
+            navigation.navigate('MiniTests', {
+              testId: testId,
             });
-          } else if (BUTTONS[buttonIndex].text == 'Tests') {
-            navigation.navigate('Tests', {
-              patientId: patientId,
-            });
-          } else if (BUTTONS[buttonIndex].text == 'Delete Patient') {
+          } else if (BUTTONS[buttonIndex].text == 'Delete Test') {
             Alert.alert(
-              'Are You Sure You Want to delete Patient?',
+              'Are You Sure You Want to delete Test?',
               'Item Delete Action',
               [
                 {
@@ -125,13 +131,13 @@ export default function ItemList() {
                 },
                 {
                   text: 'OK',
-                  onPress: () => deleteItem(patientId),
+                  onPress: () => deleteItem(testId),
                 },
               ],
             );
-          } else if (BUTTONS[buttonIndex].text == 'View Patient') {
-            navigation.navigate('ViewSinglePatient', {
-              patientId: patientId,
+          } else if (BUTTONS[buttonIndex].text == 'View Test') {
+            navigation.navigate('ViewSingleTest', {
+              testId: testId,
             });
           }
         } catch (ex) {
@@ -143,9 +149,9 @@ export default function ItemList() {
     );
   };
 
-  const deleteItem = patientId => {
+  const deleteItem = testId => {
     setSpinnerVisibility(true);
-    dispatch(DeletePatientAction(patientId));
+    dispatch(DeleteTestAction(testId));
   };
 
   useEffect(() => {
@@ -173,7 +179,7 @@ export default function ItemList() {
   const handleRefresh = () => {
     setinitPager('1');
     setResponseData('');
-    dispatch(GetPatientActions('1'));
+    dispatch(GetTestActions('1',patientId));
   };
 
   const loadAnimation = () => {
@@ -206,23 +212,12 @@ export default function ItemList() {
     return (
       <List>
         <ListItem avatar onPress={e => loadActionSheet(item.id)}>
-          <Left>
-            {item.image_file == '' ||
-            item.image_file == null ||
-            item.image_file == 'default-avatar.png' ? (
-              <Thumbnail
-                source={require('../../../../assets/images/default-avatar.png')}
-              />
-            ) : (
-              <Thumbnail source={{uri: defaultURI + '/' + item.image_file}} />
-            )}
-          </Left>
           <Body>
             <NativeBaseText>
-              {item.firstname + ' ' + item.lastname}
+            Grade
             </NativeBaseText>
             <NativeBaseText note>
-              {item.email + ',' + item.country_code + item.phonenumber}
+              {item.grade}
             </NativeBaseText>
           </Body>
           <Right>
@@ -246,7 +241,7 @@ export default function ItemList() {
         //visibility of Overlay Loading Spinner
         visible={spinnerVisiblity}
         //Text with the Spinner
-        textContent={'Removing Patient Please Wait..'}
+        textContent={'Removing Test Please Wait..'}
         //Text style of the Spinner Text
         textStyle={styles.spinnerTextStyle}
       />

@@ -3,10 +3,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 
- export const addNewPatientService = async(credentials) =>
+ export const addNewTestService = async(credentials) =>
  {  
     const http = new HttpService();
-  let Url = "user/patient/add";
+  let Url = "user/test/add";
   let tokenId = "user";
 
   const token = await AsyncStorage.getItem(tokenId);
@@ -23,15 +23,15 @@ return http.postData(credentials,Url,"POST",tokenId).then((data)=>{
      });
  }
 
-//load patients with pagination
- export  const loadPatientService = async (page) =>
+//load Tests with pagination
+ export  const loadTestService = async (page,patientId) =>
  {  
     const http = new HttpService();
   let tokenId="user";
   let pager =15;
   const token = await AsyncStorage.getItem(tokenId);
-console.log('Tokennnn: ',token)
-  let  Url = "user/patient/get-all/"+token+"/"+pager+"?page="+page;
+
+  let  Url = "user/test/get-all/"+patientId+"/"+pager+"?page="+page;
 
   return http.getData(Url,tokenId).then((data)=>{
     return data;
@@ -41,11 +41,11 @@ console.log('Tokennnn: ',token)
 
  }
 
- export const loadSinglePatientService = (id) =>
+ export const loadSingleTestService = (id) =>
  {
     const http = new HttpService();
    let tokenId = "user";
-    let Url = "user/patient/get-single/"+id;
+    let Url = "user/test/get-single/"+id;
     return http.getData( Url,tokenId).then((data)=>
     {
       return data;
@@ -55,12 +55,12 @@ console.log('Tokennnn: ',token)
  }
 
 
- export const loadSearchPatientService = async(searchData,page) =>
+ export const loadSearchTestService = async(searchData,page) =>
  {
   const http = new HttpService();
   let tokenId = "user";
   let pager =15;
-   let Url = "user/patient/search/"+searchData+"/"+pager+"?page="+page;
+   let Url = "user/test/search/"+searchData+"/"+pager+"?page="+page;
    console.log(Url);
    return http.getData( Url,tokenId).then((data)=>
    {
@@ -71,10 +71,10 @@ console.log('Tokennnn: ',token)
 }
  
 
-export const editPatientService = (credentials,id)=>
+export const editTestService = (credentials,id)=>
 {
   const http = new HttpService();
-  let Url = "user/patient/update/"+id;
+  let Url = "user/test/update/"+id;
   let tokenId = "user";
   
 return http.postData(credentials,Url,"POST",tokenId).then((data)=>{
@@ -85,10 +85,10 @@ return http.postData(credentials,Url,"POST",tokenId).then((data)=>{
 }
 
 
-export const deletePatientService = (id) =>
+export const deleteTestService = (id) =>
 {
   const http = new HttpService();
-  let Url = "user/patient/delete/"+id;
+  let Url = "user/test/delete/"+id;
   let tokenId = "user";
   let data = {};
   

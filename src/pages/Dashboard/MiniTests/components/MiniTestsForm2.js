@@ -13,7 +13,7 @@ import DecodysButton from '../../../../Components/DecodysButton';
 import {Overlay} from 'react-native-elements';
 import { useNavigation,useFocusEffect,useRoute} from '@react-navigation/native';
 import { styles } from '../styles'
-export default function Tests() {
+export default function MiniTests() {
   
   const navigation = useNavigation();
   return (

@@ -8,6 +8,7 @@ import PatientSearch from '../PatientSearch';
 import ViewSinglePatient from '../ViewSinglePatient';
 import EditPatient from '../EditPatient';
 import Tests from '../Tests';
+import MiniTests from '../MiniTests';
 import Test1 from '../Test1';
 import Test2 from '../Test2';
 import Test4 from '../Test4';
@@ -33,13 +34,12 @@ function tabNavigation() {
         tabBarStyle: {
           paddingBottom: 10,
           height: 65,
-          borderTopColor: COLORS.secondary,
-          borderTopWidth: 1,
+          backgroundColor: COLORS.primary,
         },
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarActiveTintColor: COLORS.primary,
-        tabBarInactiveTintColor: COLORS.secondary,
+        tabBarActiveTintColor: COLORS.white,
+        tabBarInactiveTintColor:COLORS.accent,
       }}>
       <Tab.Screen
         name="CreatePatient"
@@ -105,6 +105,7 @@ export default function Home() {
         <Stack.Screen name="ViewSinglePatient" component={ViewSinglePatient} />
         <Stack.Screen name="EditPatient" component={EditPatient} />
         <Stack.Screen name="Tests" component={Tests} />
+        <Stack.Screen name="MiniTests" component={MiniTests} />
         <Stack.Screen name="Test1" component={Test1} />
         <Stack.Screen name="Test2" component={Test2} />
         <Stack.Screen name="Test4" component={Test4} />

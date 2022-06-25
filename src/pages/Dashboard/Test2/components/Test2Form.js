@@ -73,7 +73,7 @@ export default function Test2() {
   const startRecording = async () => {
     setLoading(true);
     try {
-      await Voice.start('ar_EG');
+      await Voice.start('fr-FR');
     } catch (error) {
       console.log('error raised', error);
     }
@@ -248,7 +248,7 @@ export default function Test2() {
       style={{
         flex: 1,
       }}>
-      {/* <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} /> */}
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <View
         style={{
           flex: 1,

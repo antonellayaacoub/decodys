@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     container: {
-        backgroundColor:'#0ACBC5 !important'
+        backgroundColor:'#fff !important'
     },
    
    activityPosition:{
