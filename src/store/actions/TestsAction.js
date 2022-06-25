@@ -49,7 +49,7 @@ export const CreateTestAction = credentials => {
           dispatch({type: CREATE_Test_SUCCESS, res});
           console.log('res: ',res.test_id)
           for(var i=1; i<=numberOfMeniTests;i++){
-            let name ="test"+i;
+            let name ="Test"+i;
           let data =  {
             test_id: res.test_id,
             name:name,

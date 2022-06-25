@@ -60,7 +60,7 @@ export const clearCreateMiniTestState = () =>
 
 
 
-export const GetMiniTestActions = (id) =>
+export const GetMiniTestActions = (id,testId) =>
 {
 
     return (dispatch)=>{

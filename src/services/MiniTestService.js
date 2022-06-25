@@ -31,9 +31,10 @@ return http.postData(credentials,Url,"POST",tokenId).then((data)=>{
   let pager =15;
   const token = await AsyncStorage.getItem(tokenId);
 
-  let  Url = "user/miniTest/get-all/"+token+"/"+pager+"?page="+page;
-
+  let  Url = "user/miniTest/get-all/"+testId+"/"+pager+"?page="+page;
+  console.log('testIdd: ',testId)
   return http.getData(Url,tokenId).then((data)=>{
+    console.log('DATAA:', data)
     return data;
 }).catch((error)=> {console.log(error)
     return error; 

@@ -8,7 +8,7 @@ const RootReducer = combineReducers({
   authReducer: AuthReducer,
   patientReducer: PatientReducer,
   testReducer: TestReducer,
-  miniReducer: MiniTestReducer,
+  miniTestReducer: MiniTestReducer,
 });
 
 export default RootReducer;
