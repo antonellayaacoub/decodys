@@ -95,7 +95,6 @@ export default function ItemList(props) {
         setinitPager(nextPage);
         setDefaultURI(searchResponse.file_directory);
         setResponseData(responseData => [
-          ...responseData,
           ...searchResponse.data.data,
         ]);
         setrefreshBool(false);

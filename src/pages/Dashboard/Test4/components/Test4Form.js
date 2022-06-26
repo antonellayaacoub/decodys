@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   Animated,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 import DecodysButton from '../../../../Components/DecodysButton';
 import {Overlay} from 'react-native-elements';
@@ -21,121 +22,199 @@ import {
 } from '@react-navigation/native';
 import {styles} from '../styles';
 import {COLORS, SIZES} from '../../../../constants';
-import data from '../../../../data/Test1Data';
+import data from '../../../../data/Test4Data';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Voice from '@react-native-voice/voice';
 import Sound from 'react-native-sound';
-export default function Test1() {
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  clearEditMiniTestState,
+  GetSingleMiniTestAction,
+  EditMiniTestAction,
+} from '../../../../store/actions/MiniTestsAction';
+export default function Test4() {
+  const routeParams = useRoute();
+  const {miniTestId} = routeParams.params;
   const navigation = useNavigation();
+  const singleResponse = useSelector(
+    state => state.miniTestReducer.getSingleMiniTestState,
+  );
+  const [grade4, setGrade4] = useState(0);
+  const dispatch = useDispatch();
+  let text = '';
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
   const allQuestions = data;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentOptionSelected, setCurrentOptionSelected] = useState(null);
   const [correctOption, setCorrectOption] = useState(null);
-  const [score, setScore] = useState(0);
+  const [isOptionsDisabled, setIsOptionsDisabled] = useState(false);
   const [showNextButton, setShowNextButton] = useState(false);
   const [showPlayButton, setShowPLayButton] = useState(false);
-  const [grade, setGrade] = useState(0);
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const [showScoreModal, setShowScoreModal] = useState(false);
+  const [result, setResult] = useState('');
+  const [isLoading, setLoading] = useState(false);
+  const [result4, setResult4] = useState({});
   let pass = true;
   let numberOfTabs = 0;
   let timeTabs = [];
   let intervalTabs = [];
-  intervalTabs[0] = 2000;
   Sound.setCategory('Playback');
-  const handleNext = () => {
-    pass = true;
-    console.log('Grade previous: ', grade);
-    if (numberOfTabs == allQuestions[currentQuestionIndex]?.correct_option) {
-      for (var i = 2; i < intervalTabs.length; i++) {
-        if (i % 2 === 0) {
-          console.log(i);
-          console.log(
-            'pattern',
-            allQuestions[currentQuestionIndex]?.pattern[i],
-          );
-          console.log('user tabs', intervalTabs[i]);
-          if (allQuestions[currentQuestionIndex]?.pattern[i] == 2000) {
-            if (intervalTabs[i] < 1500) {
-              console.log('FALSEE');
-              pass = false;
-            }
-          }
-        }
+
+  useEffect(() => {
+    if (singleResponse != '' || singleResponse != 'loading') {
+      if (singleResponse.hasOwnProperty('data')) {
+        const data = {
+          test_id: singleResponse.data.test_id,
+          name: singleResponse.data.name,
+          grade: grade4,
+        };
+        dispatch(EditMiniTestAction(data, miniTestId));
       }
-    } else {
-      pass = false;
     }
-    if (pass) {
-      setGrade(grade + 1);
-      console.log('Grade: ', grade);
-    }
+  }, [singleResponse]);
 
-    if (currentQuestionIndex == allQuestions.length - 1) {
-      // Last Question
-      // Show Score Modal
-      //setShowScoreModal(true);
-      console.log('NAVIGATE');
-      navigation.navigate('Tests');
-    } else {
-      console.log('CHANGE TABS');
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
-    Animated.timing(progress, {
-      toValue: currentQuestionIndex + 1,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
-    setShowNextButton(false);
-    setShowPLayButton(false);
+  useEffect(() => {
+    Voice.onSpeechStart = onSpeechStartHandler;
+    Voice.onSpeechEnd = onSpeechEndHandler;
+    Voice.onSpeechResults = onSpeechResultsHandler;
+
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+  }, []);
+
+  const onSpeechStartHandler = e => {
+    console.log('start handler==>>>', e);
   };
-  const handleTabs = () => {
-    let current = new Date();
-    console.log(current.getTime());
-    numberOfTabs = numberOfTabs + 1;
-    timeTabs[numberOfTabs - 1] = current;
-    if (numberOfTabs == 1) {
-      intervalTabs[numberOfTabs] = 2000;
-    } else {
-      let differentTime =
-        current.getTime() - timeTabs[numberOfTabs - 2].getTime();
-      console.log('differentTime: ', differentTime);
-      intervalTabs[numberOfTabs] = differentTime;
+  const onSpeechEndHandler = e => {
+    setLoading(false);
+    console.log('stop handler', e);
+  };
 
-      intervalTabs[numberOfTabs + 1] = 2000;
+  const onSpeechResultsHandler = e => {
+    let text = e.value[0];
+    setResult(text);
+    console.log('speech result handler', e, typeof e);
+    setResult4(e);
+  };
+
+  const startRecording = async () => {
+    setLoading(true);
+    try {
+      await Voice.start('fr-FR');
+    } catch (error) {
+      console.log('error raised', error);
     }
-    console.log('Number of Tabs:', numberOfTabs);
+  };
+
+  const stopRecording = async () => {
+    try {
+      await Voice.stop();
+    } catch (error) {
+      console.log('error raised', error);
+    }
+  };
+  const handleNext = () => {
+    if (currentQuestionIndex == allQuestions.length - 1) {
+      pass = true;
+
+      var id = result4.value[0];
+      var last1 = id.substr(id.length - 1);
+      var last2 = id.substr(id.length - 2);
+      var last3 = id.substr(id.length - 3);
+      console.log('id',id, last1, last2, last3)
+      if (
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last1) ||
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last2) ||
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last3)
+      ) {
+        console.log('result4', result4);
+        console.log(
+          'VALLUEEEE',
+          allQuestions[currentQuestionIndex]?.correct_option,
+        );
+      } else {
+        pass = false;
+      }
+      if (pass && allQuestions[currentQuestionIndex]?.graded) {
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade4);
+        setGrade4(grade4 + 1);
+        console.log('Grade41111111111111111111111111111111: ', grade4);
+      }
+
+      console.log('NAVIGATEEEEEEEE', grade4);
+      dispatch(GetSingleMiniTestAction(miniTestId));
+      navigation.goBack();
+    } else {
+      pass = true;
+
+      var id = result4.value[0];
+      var last1 = id.substr(id.length - 1);
+      var last2 = id.substr(id.length - 2);
+      var last3 = id.substr(id.length - 3);
+      console.log('id',id, last1, last2, last3)
+      if (
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last1) ||
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last2) ||
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last3)
+      ) {
+        console.log('result4', result4);
+        console.log(
+          'VALLUEEEE',
+          allQuestions[currentQuestionIndex]?.correct_option,
+        );
+      } else {
+        pass = false;
+      }
+      if (pass && allQuestions[currentQuestionIndex]?.graded) {
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade4);
+        setGrade4(grade4 + 1);
+        console.log('Grade41111111111111111111111111111111: ', grade4);
+      }
+
+      if (currentQuestionIndex != allQuestions.length - 1) {
+        console.log('CHANGE TABS');
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }
+      Animated.timing(progress, {
+        toValue: currentQuestionIndex + 1,
+        duration: 1000,
+        useNativeDriver: false,
+      }).start();
+
+      setShowNextButton(false);
+      setShowPLayButton(false);
+    }
   };
   const soundEffect = async () => {
     console.log('ENTERRRRR');
     if (!showNextButton) {
-      numberOfTabs = 0;
-      let i;
-      for (i = 0; i < allQuestions[currentQuestionIndex]?.pattern.length; i++) {
-        console.log('i: ', i);
-        if (i % 2 === 0) {
-          console.log('even: ', i);
-          let time = allQuestions[currentQuestionIndex]?.pattern[i];
-          await sleep(time);
-        } else {
-          let sound = new Sound('beep.mp3', Sound.MAIN_BUNDLE, error => {
-            if (error) {
-              console.log('failed to load the sound', error);
-            } else {
-              console.log('odd: ', i);
-              sound.play(); // have to put the call to play() in the onload callback
-            }
-          });
-        }
-      }
-      if (i == allQuestions[currentQuestionIndex]?.pattern.length) {
-        setShowNextButton(true);
-        setShowPLayButton(true);
-      }
+      console.log(
+        'allQuestions[currentQuestionIndex]?.pattern',
+        allQuestions[currentQuestionIndex]?.pattern,
+      );
+      let sound = new Sound(
+        allQuestions[currentQuestionIndex]?.pattern + '.mp3',
+        Sound.MAIN_BUNDLE,
+        error => {
+          if (error) {
+            console.log('failed to load the sound', error);
+          } else {
+            sound.play(); // have to put the call to play() in the onload callback
+          }
+        },
+      );
+      await sleep(allQuestions[currentQuestionIndex]?.sleep);
+      setShowNextButton(true);
+      setShowPLayButton(true);
     }
   };
-
   const renderOptions = () => {
     soundEffect();
-
+    allQuestions[currentQuestionIndex]?.graded
+      ? (text = '')
+      : (text = 'Essais: ');
     return (
       <View
         style={{
@@ -150,8 +229,14 @@ export default function Test1() {
             marginBottom: '5%',
             marginTop: '5%',
           }}>
-          Play the sample, tap the button below to record your answer.
+          {text}
         </Text>
+        <TextInput
+          value={result}
+          placeholder="your text"
+          style={{color: '#000'}}
+          onChangeText={text => setResult(text)}
+        />
         {renderPlayButton()}
       </View>
     );
@@ -159,42 +244,28 @@ export default function Test1() {
   const renderPlayButton = () => {
     if (showPlayButton) {
       return (
-        <View  style={{
-         
-   
-        
-        }}>
-        <TouchableOpacity
-          onPress={handleTabs}
-          style={{
-         
-            marginTop: '50%',
-            width: 200,
-            height: 200,
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 10,
-            borderRadius: 100,
-            backgroundColor: COLORS.primary,
-          }}>
-          <MaterialIcons name="close" size={100} color="#fff" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleTabs}
-          style={{
-          
-            marginTop: '50%',
-            width: 200,
-            height: 200,
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 10,
-            borderRadius: 100,
-            backgroundColor: COLORS.primary,
-          }}>
-          <MaterialIcons name="check" size={100} color="#fff" />
-        </TouchableOpacity>
-        </View>
+        <>
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#0ACBC5" />
+          ) : (
+            <TouchableOpacity
+              onPress={startRecording}
+              style={{
+                marginLeft: '50%',
+                marginRight: '50%',
+                marginTop: '50%',
+                width: 200,
+                height: 200,
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: 10,
+                borderRadius: 100,
+                backgroundColor: COLORS.primary,
+              }}>
+              <FontAwesome name="microphone" size={100} color="#fff" />
+            </TouchableOpacity>
+          )}
+        </>
       );
     } else {
       return null;
@@ -227,7 +298,7 @@ export default function Test1() {
 
   const [progress, setProgress] = useState(new Animated.Value(0));
   const progressAnim = progress.interpolate({
-    inputRange: [0, allQuestions.length],
+    inputRange: [0, allQuestions.length - 1],
     outputRange: ['0%', '100%'],
   });
   const renderProgressBar = () => {

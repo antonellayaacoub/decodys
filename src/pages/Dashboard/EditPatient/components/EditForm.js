@@ -29,7 +29,7 @@ export default function EditForm() {
   
    const editResponse = useSelector(state=>state.patientReducer.editPatientState);
 
-   const singleResponse = useSelector(state=>state.patientReducer.getSingleCatientState);
+   const singleResponse = useSelector(state=>state.patientReducer.getSinglePatientState);
 
    const dispatch = useDispatch();
 

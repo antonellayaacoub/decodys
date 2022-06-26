@@ -65,7 +65,7 @@ export default function ItemList() {
 
   useEffect(() => {
     dispatch(GetTestActions(initPager, patientId));
-
+    console.log('111111')
     return () => {};
   }, []);
 
@@ -80,11 +80,12 @@ export default function ItemList() {
         setinitPager(nextPage);
         setDefaultURI(getResponse.file_directory);
         setResponseData(responseData => [
-          ...responseData,
+         
           ...getResponse.data.data,
         ]);
         setrefreshBool(false);
         setTotalItems(getResponse.data.total);
+        console.log('INNNNNNNNN')
       }
     }
     return () => {};
@@ -95,6 +96,7 @@ export default function ItemList() {
     } else {
       setrefreshBool(true);
       dispatch(GetTestActions(initPager, patientId));
+      console.log('33333')
     }
   };
 
@@ -180,6 +182,7 @@ export default function ItemList() {
     setinitPager('1');
     setResponseData('');
     dispatch(GetTestActions('1',patientId));
+    console.log('2222')
   };
 
   const loadAnimation = () => {

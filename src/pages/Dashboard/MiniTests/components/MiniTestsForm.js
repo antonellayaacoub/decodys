@@ -71,7 +71,6 @@ export default function ItemList() {
         setinitPager(nextPage);
         setDefaultURI(getResponse.file_directory);
         setResponseData(responseData => [
-          ...responseData,
           ...getResponse.data.data,
         ]);
         setrefreshBool(false);

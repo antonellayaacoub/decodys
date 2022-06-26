@@ -77,7 +77,7 @@ export const editMiniTestService = (credentials,id)=>
   const http = new HttpService();
   let Url = "user/miniTest/update/"+id;
   let tokenId = "user";
-  
+  console.log('miniTesttttId:  ',id)
 return http.postData(credentials,Url,"POST",tokenId).then((data)=>{
     return data;
 }).catch((error)=> {console.log(error)

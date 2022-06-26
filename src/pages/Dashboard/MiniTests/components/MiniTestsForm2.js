@@ -44,7 +44,7 @@ export default function MiniTests() {
               outline={true}
             />
               <DecodysButton
-              buttonFunction={() => navigation.navigate('Test4')}
+              buttonFunction={() => navigation.navigate('Test3')}
               bgcolor="#fff"
               text="Test 4"
               color={'#0ACBC5'}

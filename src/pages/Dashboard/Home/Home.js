@@ -11,7 +11,13 @@ import Tests from '../Tests';
 import MiniTests from '../MiniTests';
 import Test1 from '../Test1';
 import Test2 from '../Test2';
+import Test3 from '../Test3';
 import Test4 from '../Test4';
+import Test5 from '../Test5';
+import Test6 from '../Test6';
+import Test7 from '../Test7';
+import Test8 from '../Test8';
+import Test9 from '../Test9';
 import {HttpInterceptor} from '../../../HttpInterceptor';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -39,7 +45,7 @@ function tabNavigation() {
         headerShown: false,
         tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: COLORS.white,
-        tabBarInactiveTintColor:COLORS.accent,
+        tabBarInactiveTintColor: COLORS.accent,
       }}>
       <Tab.Screen
         name="CreatePatient"
@@ -108,7 +114,13 @@ export default function Home() {
         <Stack.Screen name="MiniTests" component={MiniTests} />
         <Stack.Screen name="Test1" component={Test1} />
         <Stack.Screen name="Test2" component={Test2} />
+        <Stack.Screen name="Test3" component={Test3} />
         <Stack.Screen name="Test4" component={Test4} />
+        <Stack.Screen name="Test4" component={Test5} />
+        <Stack.Screen name="Test4" component={Test6} />
+        <Stack.Screen name="Test4" component={Test7} />
+        <Stack.Screen name="Test4" component={Test8} />
+        <Stack.Screen name="Test4" component={Test9} />
       </Stack.Navigator>
     </>
   );

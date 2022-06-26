@@ -1,11 +1,15 @@
 export default data = [
     {
-      pattern: [1000, 2000, 3000, 2000, 1000, 2000],
-      correct_option: 3,
+      pattern: 'test4_1',
+      correct_option: ['eau','o','au'],
+      sleep:2000,
+      graded:false,
     },
     {
-      pattern: [1000, 2000, 3000, 2000],
-      correct_option: 2,
+      pattern: 'test4_2',
+      correct_option: ['on'],
+      sleep:2000,
+      graded:true,
     },
+   
   ];
-  

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -25,68 +25,129 @@ import data from '../../../../data/Test1Data';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Sound from 'react-native-sound';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  clearEditMiniTestState,
+  GetSingleMiniTestAction,
+  EditMiniTestAction,
+} from '../../../../store/actions/MiniTestsAction';
+
+
 export default function Test1() {
+  const routeParams = useRoute();
+  const {miniTestId} = routeParams.params;
   const navigation = useNavigation();
+  const singleResponse = useSelector(
+    state => state.miniTestReducer.getSingleMiniTestState,
+  );
+  const [grade1, setGrade1] = useState(0);
+  const dispatch = useDispatch();
   const allQuestions = data;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [correctOption, setCorrectOption] = useState(null);
-  const [score, setScore] = useState(0);
   const [showNextButton, setShowNextButton] = useState(false);
   const [showPlayButton, setShowPLayButton] = useState(false);
-  const [grade, setGrade] = useState(0);
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   let pass = true;
   let numberOfTabs = 0;
   let timeTabs = [];
   let intervalTabs = [];
+  let text = '';
   intervalTabs[0] = 2000;
   Sound.setCategory('Playback');
+
+  useEffect(() => {
+    if (singleResponse != '' || singleResponse != 'loading') {
+      if (singleResponse.hasOwnProperty('data')) {
+        const data = {
+          test_id: singleResponse.data.test_id,
+          name: singleResponse.data.name,
+          grade: grade1,
+        };
+        dispatch(EditMiniTestAction(data, miniTestId));
+      }
+    }
+  }, [singleResponse]);
+
   const handleNext = () => {
-    pass = true;
-    console.log('Grade previous: ', grade);
-    if (numberOfTabs == allQuestions[currentQuestionIndex]?.correct_option) {
-      for (var i = 2; i < intervalTabs.length; i++) {
-        if (i % 2 === 0) {
-          console.log(i);
-          console.log(
-            'pattern',
-            allQuestions[currentQuestionIndex]?.pattern[i],
-          );
-          console.log('user tabs', intervalTabs[i]);
-          if (allQuestions[currentQuestionIndex]?.pattern[i] == 2000) {
-            if (intervalTabs[i] < 1500) {
-              console.log('FALSEE');
-              pass = false;
+    if (currentQuestionIndex == allQuestions.length - 1) {
+      pass = true;
+     
+      if (numberOfTabs == allQuestions[currentQuestionIndex]?.correct_option) {
+        for (var i = 2; i < intervalTabs.length; i++) {
+          if (i % 2 === 0) {
+            console.log(i);
+            console.log(
+              'pattern',
+              allQuestions[currentQuestionIndex]?.pattern[i],
+            );
+            console.log('user tabs', intervalTabs[i]);
+            console.log(allQuestions[currentQuestionIndex]?.pattern[i])
+            if (allQuestions[currentQuestionIndex]?.pattern[i] == 5000) {
+              console.log('in 5000',allQuestions[currentQuestionIndex]?.pattern[i])
+              if (intervalTabs[i] < 1500) { 
+                console.log('FALSEEEEE');
+                pass = false;
+              } 
             }
           }
         }
+      } else {
+        console.log('WORNGGGG TABS')
+        pass = false;
       }
-    } else {
-      pass = false;
-    }
-    if (pass) {
-      setGrade(grade + 1);
-      console.log('Grade: ', grade);
-    }
+      if (pass && allQuestions[currentQuestionIndex]?.graded) {
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade1);
+        setGrade1(grade1 + 1);
+        console.log('Grade11111111111111111111111111111111: ', grade1);
+      }
 
-    if (currentQuestionIndex == allQuestions.length - 1) {
-      // Last Question
-      // Show Score Modal
-      //setShowScoreModal(true);
-      console.log('NAVIGATE');
-      navigation.navigate('Tests');
+      console.log('NAVIGATEEEEEEEE', grade1);
+      dispatch(GetSingleMiniTestAction(miniTestId));
+      navigation.goBack();
     } else {
-      console.log('CHANGE TABS');
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      pass = true;
+    
+      if (numberOfTabs == allQuestions[currentQuestionIndex]?.correct_option) {
+        for (var i = 2; i < intervalTabs.length; i++) {
+          if (i % 2 === 0) {
+            console.log(i);
+            console.log(
+              'pattern',
+              allQuestions[currentQuestionIndex]?.pattern[i],
+            );
+            console.log('user tabs', intervalTabs[i]);
+            if (allQuestions[currentQuestionIndex]?.pattern[i] == 2000) {
+              if (intervalTabs[i] < 1500) {
+                console.log('FALSEE');
+                pass = false;
+              }
+            }
+          }
+        }
+      } else {
+        pass = false;
+      }
+      if (pass && allQuestions[currentQuestionIndex]?.graded) {
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade1);
+        setGrade1(grade1 + 1);
+        console.log('Grade11111111111111111111111111111111: ', grade1);
+      }
+
+      if (currentQuestionIndex != allQuestions.length - 1) {
+        console.log('CHANGE TABS');
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }
+      Animated.timing(progress, {
+        toValue: currentQuestionIndex + 1,
+        duration: 1000,
+        useNativeDriver: false,
+      }).start();
+      setShowNextButton(false);
+      setShowPLayButton(false);
     }
-    Animated.timing(progress, {
-      toValue: currentQuestionIndex + 1,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
-    setShowNextButton(false);
-    setShowPLayButton(false);
   };
+
   const handleTabs = () => {
     let current = new Date();
     console.log(current.getTime());
@@ -104,6 +165,7 @@ export default function Test1() {
     }
     console.log('Number of Tabs:', numberOfTabs);
   };
+
   const soundEffect = async () => {
     console.log('ENTERRRRR');
     if (!showNextButton) {
@@ -135,6 +197,9 @@ export default function Test1() {
 
   const renderOptions = () => {
     soundEffect();
+    allQuestions[currentQuestionIndex]?.graded
+      ? (text = '')
+      : (text = 'Essais: ');
 
     return (
       <View
@@ -150,7 +215,7 @@ export default function Test1() {
             marginBottom: '5%',
             marginTop: '5%',
           }}>
-          Play the sample, tap the button below to record your answer.
+          {text}
         </Text>
         {renderPlayButton()}
       </View>
@@ -207,7 +272,7 @@ export default function Test1() {
 
   const [progress, setProgress] = useState(new Animated.Value(0));
   const progressAnim = progress.interpolate({
-    inputRange: [0, allQuestions.length],
+    inputRange: [0, allQuestions.length - 1],
     outputRange: ['0%', '100%'],
   });
   const renderProgressBar = () => {
