@@ -40,7 +40,7 @@ export default function Test5() {
   const singleResponse = useSelector(
     state => state.miniTestReducer.getSingleMiniTestState,
   );
-  const [grade4, setGrade4] = useState(0);
+  const [grade5, setGrade5] = useState(0);
   const dispatch = useDispatch();
   let text = '';
   const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -67,8 +67,9 @@ export default function Test5() {
         const data = {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
-          grade: grade4,
+          grade: grade5,
         };
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade5));
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -124,10 +125,7 @@ export default function Test5() {
       var last2 = id.substr(id.length - 2);
       var last3 = id.substr(id.length - 3);
       console.log('id',id, last1, last2, last3)
-      if (
-        result5.value.includes(
-          allQuestions[currentQuestionIndex]?.correct_option,
-      ) {
+      if (result5.value.includes(allQuestions[currentQuestionIndex]?.correct_option) ){
         console.log('result5', result5);
         console.log(
           'VALLUEEEE',
@@ -137,12 +135,12 @@ export default function Test5() {
         pass = false;
       }
       if (pass && allQuestions[currentQuestionIndex]?.graded) {
-        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade4);
-        setGrade4(grade4 + 1);
-        console.log('Grade41111111111111111111111111111111: ', grade4);
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade5);
+        setGrade5(grade5 + 1);
+        console.log('Grade51111111111111111111111111111111: ', grade5);
       }
 
-      console.log('NAVIGATEEEEEEEE', grade4);
+      console.log('NAVIGATEEEEEEEE', grade5);
       dispatch(GetSingleMiniTestAction(miniTestId));
       navigation.goBack();
     } else {
@@ -153,10 +151,7 @@ export default function Test5() {
       var last2 = id.substr(id.length - 2);
       var last3 = id.substr(id.length - 3);
       console.log('id',id, last1, last2, last3)
-      if (
-        result5.value.includes(
-          allQuestions[currentQuestionIndex]?.correct_option,
-      ) {
+      if (result5.value.includes(allQuestions[currentQuestionIndex]?.correct_option) ) {
         console.log('result5', result5);
         console.log(
           'VALLUEEEE',
@@ -166,9 +161,9 @@ export default function Test5() {
         pass = false;
       }
       if (pass && allQuestions[currentQuestionIndex]?.graded) {
-        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade4);
-        setGrade4(grade4 + 1);
-        console.log('Grade41111111111111111111111111111111: ', grade4);
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade5);
+        setGrade5(grade5 + 1);
+        console.log('Grade51111111111111111111111111111111: ', grade5);
       }
 
       if (currentQuestionIndex != allQuestions.length - 1) {

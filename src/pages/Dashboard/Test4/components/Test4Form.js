@@ -69,6 +69,7 @@ export default function Test4() {
           name: singleResponse.data.name,
           grade: grade4,
         };
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade4));
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }

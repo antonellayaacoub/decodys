@@ -33,12 +33,20 @@ import {
   GetSingleMiniTestAction,
   EditMiniTestAction,
 } from '../../../../store/actions/MiniTestsAction';
+import {
+  clearEditTestState,
+  GetSingleTestAction,
+  EditTestAction,
+} from '../../../../store/actions/TestsAction.js';
 export default function Test3() {
   const routeParams = useRoute();
   const {miniTestId} = routeParams.params;
   const navigation = useNavigation();
   const singleResponse = useSelector(
     state => state.miniTestReducer.getSingleMiniTestState,
+  );
+  const singleResponse2 = useSelector(
+    state => state.testReducer.getSingleTestState,
   );
   const [grade3, setGrade3] = useState(0);
   const dispatch = useDispatch();
@@ -63,12 +71,14 @@ export default function Test3() {
 
   useEffect(() => {
     if (singleResponse != '' || singleResponse != 'loading') {
+      console.log('singleRespons singleRespons', singleResponse);
       if (singleResponse.hasOwnProperty('data')) {
         const data = {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
           grade: grade3,
         };
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade3));
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -150,8 +160,8 @@ export default function Test3() {
   const renderOptions = () => {
     soundEffect();
     allQuestions[currentQuestionIndex]?.graded
-    ? (text = '')
-    : (text = 'Essais: ');
+      ? (text = '')
+      : (text = 'Essais: ');
     return (
       <View
         style={{
@@ -159,7 +169,7 @@ export default function Test3() {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-         <Text
+        <Text
           style={{
             fontSize: 20,
             color: COLORS.secondary,
@@ -179,6 +189,7 @@ export default function Test3() {
         <View
           style={{
             width: '90%',
+            paddingHorizontal: 15,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',

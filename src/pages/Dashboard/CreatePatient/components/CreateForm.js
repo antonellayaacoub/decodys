@@ -471,7 +471,7 @@ const changeCountry =(phoneNumber) =>
         onChangeText={onChangeNumber} 
         phoneInputStyle={{fontSize:17,color:'black'}}
         value={fields.phonenumber}
-        defaultCountry="NG" 
+        defaultCountry="LB" 
         countryCodeChange={changeCountry}
         />
       </Item>

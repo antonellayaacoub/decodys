@@ -40,7 +40,7 @@ export default function Test6() {
   const singleResponse = useSelector(
     state => state.miniTestReducer.getSingleMiniTestState,
   );
-  const [grade4, setGrade4] = useState(0);
+  const [grade6, setGrade6] = useState(0);
   const dispatch = useDispatch();
   let text = '';
   const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -54,7 +54,7 @@ export default function Test6() {
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [result, setResult] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [result5, setresult5] = useState({});
+  const [result6, setresult6] = useState({});
   let pass = true;
   let numberOfTabs = 0;
   let timeTabs = [];
@@ -67,8 +67,9 @@ export default function Test6() {
         const data = {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
-          grade: grade4,
+          grade: grade6,
         };
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade6));
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -96,7 +97,7 @@ export default function Test6() {
     let text = e.value[0];
     setResult(text);
     console.log('speech result handler', e, typeof e);
-    setresult5(e);
+    setresult6(e);
   };
 
   const startRecording = async () => {
@@ -119,16 +120,13 @@ export default function Test6() {
     if (currentQuestionIndex == allQuestions.length - 1) {
       pass = true;
 
-      var id = result5.value[0];
+      var id = result6.value[0];
       var last1 = id.substr(id.length - 1);
       var last2 = id.substr(id.length - 2);
       var last3 = id.substr(id.length - 3);
       console.log('id',id, last1, last2, last3)
-      if (
-        result5.value.includes(
-          allQuestions[currentQuestionIndex]?.correct_option,
-      ) {
-        console.log('result5', result5);
+      if (result6.value.includes(allQuestions[currentQuestionIndex]?.correct_option) ) {
+        console.log('result6', result6);
         console.log(
           'VALLUEEEE',
           allQuestions[currentQuestionIndex]?.correct_option,
@@ -137,27 +135,24 @@ export default function Test6() {
         pass = false;
       }
       if (pass && allQuestions[currentQuestionIndex]?.graded) {
-        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade4);
-        setGrade4(grade4 + 1);
-        console.log('Grade41111111111111111111111111111111: ', grade4);
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade6);
+        setGrade6(grade6 + 1);
+        console.log('Grade61111111111111111111111111111111: ', grade6);
       }
 
-      console.log('NAVIGATEEEEEEEE', grade4);
+      console.log('NAVIGATEEEEEEEE', grade6);
       dispatch(GetSingleMiniTestAction(miniTestId));
       navigation.goBack();
     } else {
       pass = true;
 
-      var id = result5.value[0];
+      var id = result6.value[0];
       var last1 = id.substr(id.length - 1);
       var last2 = id.substr(id.length - 2);
       var last3 = id.substr(id.length - 3);
       console.log('id',id, last1, last2, last3)
-      if (
-        result5.value.includes(
-          allQuestions[currentQuestionIndex]?.correct_option,
-      ) {
-        console.log('result5', result5);
+      if (result6.value.includes(allQuestions[currentQuestionIndex]?.correct_option) ) {
+        console.log('result6', result6);
         console.log(
           'VALLUEEEE',
           allQuestions[currentQuestionIndex]?.correct_option,
@@ -166,9 +161,9 @@ export default function Test6() {
         pass = false;
       }
       if (pass && allQuestions[currentQuestionIndex]?.graded) {
-        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade4);
-        setGrade4(grade4 + 1);
-        console.log('Grade41111111111111111111111111111111: ', grade4);
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade6);
+        setGrade6(grade6 + 1);
+        console.log('Grade61111111111111111111111111111111: ', grade6);
       }
 
       if (currentQuestionIndex != allQuestions.length - 1) {

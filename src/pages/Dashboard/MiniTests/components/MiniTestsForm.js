@@ -10,8 +10,12 @@ import {
   ActionSheet,
   View,
 } from 'native-base';
-import {FlatList, ActivityIndicator, Alert} from 'react-native';
-import{useNavigation,useFocusEffect,useRoute} from '@react-navigation/native';
+import {FlatList, ActivityIndicator, Alert, ScrollView} from 'react-native';
+import {
+  useNavigation,
+  useFocusEffect,
+  useRoute,
+} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import ContentLoader, {
   Rect,
@@ -25,11 +29,11 @@ import {
 } from '../../../../store/actions/MiniTestsAction';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {styles} from '../styles';
+import DecodysButton from '../../../../Components/DecodysButton';
 
 export default function ItemList() {
- 
   const routeParams = useRoute();
-  const { testId } = routeParams.params;
+  const {testId} = routeParams.params;
   const CANCEL_INDEX = 3;
 
   const [refreshBool, setrefreshBool] = useState(false);
@@ -37,8 +41,6 @@ export default function ItemList() {
   const getResponse = useSelector(
     state => state.miniTestReducer.getMiniTestState,
   );
-
- 
 
   const [responseData, setResponseData] = useState([]);
 
@@ -55,7 +57,7 @@ export default function ItemList() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(GetMiniTestActions(initPager,testId));
+    dispatch(GetMiniTestActions(initPager, testId));
 
     return () => {};
   }, []);
@@ -70,9 +72,7 @@ export default function ItemList() {
         let nextPage = currentPage + 1;
         setinitPager(nextPage);
         setDefaultURI(getResponse.file_directory);
-        setResponseData(responseData => [
-          ...getResponse.data.data,
-        ]);
+        setResponseData(responseData => [...getResponse.data.data]);
         setrefreshBool(false);
         setTotalItems(getResponse.data.total);
       }
@@ -84,20 +84,14 @@ export default function ItemList() {
     if (initPager == 1 || totalItems < 16) {
     } else {
       setrefreshBool(true);
-      dispatch(GetMiniTestActions(initPager,testId));
+      dispatch(GetMiniTestActions(initPager, testId));
     }
   };
-
- 
-
-
-
-
 
   const handleRefresh = () => {
     setinitPager('1');
     setResponseData('');
-    dispatch(GetMiniTestActions('1',testId));
+    dispatch(GetMiniTestActions('1', testId));
   };
 
   const loadAnimation = () => {
@@ -128,19 +122,17 @@ export default function ItemList() {
 
   const renderItem = (item, index) => {
     return (
-      <List>
-        <ListItem avatar onPress={e =>  navigation.navigate(item.name, {
-              miniTestId: item.id,
-            })
-            }>
-          <Left/>
-          <Body>
-            <NativeBaseText>
-              {item.name}
-            </NativeBaseText>
-          </Body>
-        </ListItem>
-      </List>
+      <DecodysButton
+        buttonFunction={e =>
+          navigation.navigate(item.name, {
+            miniTestId: item.id,
+          })
+        }
+        bgcolor="#fff"
+        text={item.name}
+        color={'#0ACBC5'}
+        outline={true}
+      />
     );
   };
 
@@ -153,22 +145,35 @@ export default function ItemList() {
 
   return (
     <>
-      {(responseData == '' || responseData == 'loading') && initPager == 1 ? (
-        loadAnimation()
-      ) : responseData == null ? (
-        loadAnimation()
-      ) : (
-        <FlatList
-          data={responseData}
-          renderItem={({item, index}) => renderItem(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-          onEndReached={fetchMore}
-          onEndReachedThreshold={0.1}
-          onRefresh={handleRefresh}
-          ListFooterComponent={renderFooter}
-          refreshing={refreshBool}
-        />
-      )}
+      <ScrollView
+        style={{
+          width: '100%',
+        }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: 'center',
+          marginLeft:'10%',
+          marginTop:20,
+          width: '80%',
+          
+        }}>
+        {(responseData == '' || responseData == 'loading') && initPager == 1 ? (
+          loadAnimation()
+        ) : responseData == null ? (
+          loadAnimation()
+        ) : (
+          <FlatList
+            data={responseData}
+            renderItem={({item, index}) => renderItem(item, index)}
+            keyExtractor={(item, index) => index.toString()}
+            onEndReached={fetchMore}
+            onEndReachedThreshold={0.1}
+            onRefresh={handleRefresh}
+            ListFooterComponent={renderFooter}
+            refreshing={refreshBool}
+          />
+        )}
+      </ScrollView>
     </>
   );
 }

@@ -6,6 +6,7 @@ import CreatePatient from '../CreatePatient';
 import ViewPatient from '../ViewPatient';
 import PatientSearch from '../PatientSearch';
 import ViewSinglePatient from '../ViewSinglePatient';
+import ViewSingleTest from '../ViewSingleTest';
 import EditPatient from '../EditPatient';
 import Tests from '../Tests';
 import MiniTests from '../MiniTests';
@@ -116,11 +117,12 @@ export default function Home() {
         <Stack.Screen name="Test2" component={Test2} />
         <Stack.Screen name="Test3" component={Test3} />
         <Stack.Screen name="Test4" component={Test4} />
-        <Stack.Screen name="Test4" component={Test5} />
-        <Stack.Screen name="Test4" component={Test6} />
-        <Stack.Screen name="Test4" component={Test7} />
-        <Stack.Screen name="Test4" component={Test8} />
-        <Stack.Screen name="Test4" component={Test9} />
+        <Stack.Screen name="Test5" component={Test5} />
+        <Stack.Screen name="Test6" component={Test6} />
+        <Stack.Screen name="Test7" component={Test7} />
+        <Stack.Screen name="Test8" component={Test8} />
+        <Stack.Screen name="Test9" component={Test9} />
+        <Stack.Screen name="ViewSingleTest" component={ViewSingleTest} />
       </Stack.Navigator>
     </>
   );

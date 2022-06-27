@@ -30,13 +30,13 @@ import {styles} from '../styles';
 export default function ItemList(props) {
   const BUTTONS = [
     {text: 'Tests', icon: 'newspaper', iconColor: '#0ACBC5'},
-    {text: 'Patient Me', icon: 'md-person', iconColor: '#0ACBC5'},
+    {text: 'Patient', icon: 'md-person', iconColor: '#0ACBC5'},
     {text: 'Edit Patient', icon: 'image', iconColor: '#0ACBC5'},
     {text: 'Delete Patient', icon: 'trash', iconColor: '#6C7594'},
     {text: 'Cancel', icon: 'close', iconColor: '#6C7594'},
   ];
 
-  const CANCEL_INDEX = 3;
+  const CANCEL_INDEX = 4;
 
   const navigation = useNavigation();
 
@@ -180,7 +180,7 @@ export default function ItemList(props) {
                 },
               ],
             );
-          } else if (BUTTONS[buttonIndex].text == 'View Patient') {
+          } else if (BUTTONS[buttonIndex].text == 'Patient') {
             navigation.navigate('ViewSinglePatient', {
               patientId: patientId,
             });

@@ -31,11 +31,7 @@ import {
   deleteMiniTestService,
 } from '../../services/MiniTestService';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  clearEditTestState,
-  GetSingleTestAction,
-  EditTestAction,
-} from '../actions/TestsAction';
+import {useEffect} from 'react';
 export const CreateMiniTestAction = credentials => {
   return dispatch => {
     dispatch({type: CREATE_MiniTest_LOADING});
@@ -133,28 +129,15 @@ export const clearSearchMiniTestState = () => {
 };
 
 export const EditMiniTestAction = (credentials, id) => {
+
   return dispatch => {
     dispatch({type: UPDATE_MiniTest_LOADING});
-    // const singleResponse = useSelector(
-    //   state => state.testReducer.getSingleTestState,
-    // );
-    // useEffect(() => {
-    //   if (singleResponse != '' || singleResponse != 'loading') {
-    //     if (singleResponse.hasOwnProperty('data')) {
-    //       const dataLTest = {
-    //         patient_id: singleResponse.data.patient_id,
-    //         grade: singleResponse.data.grade + credentials.grade,
-    //       };
-    //       dispatch(EditTestAction(dataTest, singleResponse.data.id));
-    //     }
-    //   }
-    // }, [singleResponse]);
+
     editMiniTestService(credentials, id).then(
       res => {
         console.log(res);
 
         if (res.hasOwnProperty('success') && res.success == true) {
-        //   dispatch(GetSingleTestAction(credentials.test_id));
           dispatch({type: UPDATE_MiniTest_SUCCESS, res});
         } else if (res.hasOwnProperty('success') && res.success == false) {
           dispatch({type: UPDATE_MiniTest_ERROR, res});

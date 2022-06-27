@@ -40,7 +40,7 @@ export default function Test9() {
   const singleResponse = useSelector(
     state => state.miniTestReducer.getSingleMiniTestState,
   );
-  const [grade4, setGrade4] = useState(0);
+  const [grade9, setGrade9] = useState(0);
   const dispatch = useDispatch();
   let text = '';
   const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -54,7 +54,7 @@ export default function Test9() {
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [result, setResult] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [result5, setresult5] = useState({});
+  const [result9, setResult9] = useState({});
   let pass = true;
   let numberOfTabs = 0;
   let timeTabs = [];
@@ -67,8 +67,9 @@ export default function Test9() {
         const data = {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
-          grade: grade4,
+          grade: grade9,
         };
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade9));
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -96,13 +97,13 @@ export default function Test9() {
     let text = e.value[0];
     setResult(text);
     console.log('speech result handler', e, typeof e);
-    setresult5(e);
+    setResult9(e);
   };
 
   const startRecording = async () => {
     setLoading(true);
     try {
-      await Voice.start('fr-FR');
+      await Voice.start('ar-EG');
     } catch (error) {
       console.log('error raised', error);
     }
@@ -119,16 +120,17 @@ export default function Test9() {
     if (currentQuestionIndex == allQuestions.length - 1) {
       pass = true;
 
-      var id = result5.value[0];
+      var id = result9.value[0];
       var last1 = id.substr(id.length - 1);
       var last2 = id.substr(id.length - 2);
       var last3 = id.substr(id.length - 3);
       console.log('id',id, last1, last2, last3)
       if (
-        result5.value.includes(
-          allQuestions[currentQuestionIndex]?.correct_option,
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last1) ||
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last2) ||
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last3)
       ) {
-        console.log('result5', result5);
+        console.log('result9', result9);
         console.log(
           'VALLUEEEE',
           allQuestions[currentQuestionIndex]?.correct_option,
@@ -137,27 +139,28 @@ export default function Test9() {
         pass = false;
       }
       if (pass && allQuestions[currentQuestionIndex]?.graded) {
-        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade4);
-        setGrade4(grade4 + 1);
-        console.log('Grade41111111111111111111111111111111: ', grade4);
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade9);
+        setGrade9(grade9 + 1);
+        console.log('Grade91111111111111111111111111111111: ', grade9);
       }
 
-      console.log('NAVIGATEEEEEEEE', grade4);
+      console.log('NAVIGATEEEEEEEE', grade9);
       dispatch(GetSingleMiniTestAction(miniTestId));
       navigation.goBack();
     } else {
       pass = true;
 
-      var id = result5.value[0];
+      var id = result9.value[0];
       var last1 = id.substr(id.length - 1);
       var last2 = id.substr(id.length - 2);
       var last3 = id.substr(id.length - 3);
       console.log('id',id, last1, last2, last3)
       if (
-        result5.value.includes(
-          allQuestions[currentQuestionIndex]?.correct_option,
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last1) ||
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last2) ||
+        allQuestions[currentQuestionIndex]?.correct_option.includes(last3)
       ) {
-        console.log('result5', result5);
+        console.log('result9', result9);
         console.log(
           'VALLUEEEE',
           allQuestions[currentQuestionIndex]?.correct_option,
@@ -166,9 +169,9 @@ export default function Test9() {
         pass = false;
       }
       if (pass && allQuestions[currentQuestionIndex]?.graded) {
-        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade4);
-        setGrade4(grade4 + 1);
-        console.log('Grade41111111111111111111111111111111: ', grade4);
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade9);
+        setGrade9(grade9 + 1);
+        console.log('Grade91111111111111111111111111111111: ', grade9);
       }
 
       if (currentQuestionIndex != allQuestions.length - 1) {

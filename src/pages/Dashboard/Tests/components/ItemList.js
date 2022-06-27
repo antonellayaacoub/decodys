@@ -11,7 +11,11 @@ import {
   View,
 } from 'native-base';
 import {FlatList, ActivityIndicator, Alert} from 'react-native';
-import {useNavigation,useFocusEffect,useRoute} from '@react-navigation/native';
+import {
+  useNavigation,
+  useFocusEffect,
+  useRoute,
+} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import ContentLoader, {
   Rect,
@@ -29,21 +33,19 @@ import {styles} from '../styles';
 export default function ItemList() {
   const BUTTONS = [
     {text: 'MiniTests', icon: 'newspaper', iconColor: '#0ACBC5'},
-    {text: 'Test', icon: 'md-person', iconColor: '#0ACBC5'},
+    {text: 'Test', icon: 'md-list-circle-sharp', iconColor: '#0ACBC5'},
     {text: 'Delete Test', icon: 'trash', iconColor: '#6C7594'},
     {text: 'Cancel', icon: 'close', iconColor: '#6C7594'},
   ];
 
   const routeParams = useRoute();
-  const { patientId } = routeParams.params;
+  const {patientId} = routeParams.params;
 
   const CANCEL_INDEX = 3;
 
   const [refreshBool, setrefreshBool] = useState(false);
 
-  const getResponse = useSelector(
-    state => state.testReducer.getTestState,
-  );
+  const getResponse = useSelector(state => state.testReducer.getTestState);
 
   const deleteResponse = useSelector(
     state => state.testReducer.deleteTestResponse,
@@ -65,7 +67,7 @@ export default function ItemList() {
 
   useEffect(() => {
     dispatch(GetTestActions(initPager, patientId));
-    console.log('111111')
+    console.log('111111');
     return () => {};
   }, []);
 
@@ -79,13 +81,10 @@ export default function ItemList() {
         let nextPage = currentPage + 1;
         setinitPager(nextPage);
         setDefaultURI(getResponse.file_directory);
-        setResponseData(responseData => [
-         
-          ...getResponse.data.data,
-        ]);
+        setResponseData(responseData => [...getResponse.data.data]);
         setrefreshBool(false);
         setTotalItems(getResponse.data.total);
-        console.log('INNNNNNNNN')
+        console.log('INNNNNNNNN');
       }
     }
     return () => {};
@@ -96,7 +95,7 @@ export default function ItemList() {
     } else {
       setrefreshBool(true);
       dispatch(GetTestActions(initPager, patientId));
-      console.log('33333')
+      console.log('33333');
     }
   };
 
@@ -110,15 +109,19 @@ export default function ItemList() {
       buttonIndex => {
         try {
           if (BUTTONS[buttonIndex].text == 'Add Test') {
-           console.log('Test')
-           const data =  {
-            patient_id: patientId,
-            garde:0,
-          };
+            console.log('Test');
+            const data = {
+              patient_id: patientId,
+              garde: 0,
+            };
 
-           dispatch(CreateTestAction(data));
+            dispatch(CreateTestAction(data));
           } else if (BUTTONS[buttonIndex].text == 'MiniTests') {
             navigation.navigate('MiniTests', {
+              testId: testId,
+            });
+          } else if (BUTTONS[buttonIndex].text == 'Test') {
+            navigation.navigate('ViewSingleTest', {
               testId: testId,
             });
           } else if (BUTTONS[buttonIndex].text == 'Delete Test') {
@@ -181,8 +184,8 @@ export default function ItemList() {
   const handleRefresh = () => {
     setinitPager('1');
     setResponseData('');
-    dispatch(GetTestActions('1',patientId));
-    console.log('2222')
+    dispatch(GetTestActions('1', patientId));
+    console.log('2222');
   };
 
   const loadAnimation = () => {
@@ -216,12 +219,9 @@ export default function ItemList() {
       <List>
         <ListItem avatar onPress={e => loadActionSheet(item.id)}>
           <Body>
-            <NativeBaseText>
-            Grade
-            </NativeBaseText>
-            <NativeBaseText note>
-              {item.grade}
-            </NativeBaseText>
+            <NativeBaseText>Test {index + 1}</NativeBaseText>
+            <NativeBaseText>Grade:</NativeBaseText>
+            <NativeBaseText note>{item.grade}</NativeBaseText>
           </Body>
           <Right>
             <NativeBaseText note>{item.created_at}</NativeBaseText>

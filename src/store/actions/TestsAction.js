@@ -36,7 +36,7 @@ import {
   DeleteMiniTestAction,
 } from '../actions/MiniTestsAction';
 
-const numberOfMeniTests=9;
+const numberOfMeniTests = 9;
 export const CreateTestAction = credentials => {
   return dispatch => {
     dispatch({type: CREATE_Test_LOADING});
@@ -47,16 +47,16 @@ export const CreateTestAction = credentials => {
 
         if (res.hasOwnProperty('success') && res.success == true) {
           dispatch({type: CREATE_Test_SUCCESS, res});
-          console.log('res: ',res.test_id)
-          for(var i=1; i<=numberOfMeniTests;i++){
-            let name ="Test"+i;
-          let data =  {
-            test_id: res.test_id,
-            name:name,
-            grade:0,
-          };
-           dispatch(CreateMiniTestAction(data));
-        }
+          console.log('res: ', res.test_id);
+          for (var i = 1; i <= numberOfMeniTests; i++) {
+            let name = 'Test' + i;
+            let data = {
+              test_id: res.test_id,
+              name: name,
+              grade: 0,
+            };
+            dispatch(CreateMiniTestAction(data));
+          }
         } else if (res.hasOwnProperty('success') && res.success == false) {
           dispatch({type: CREATE_Test_ERROR, res});
         }
@@ -95,7 +95,7 @@ export const GetTestActions = (id, patientId) => {
   };
 };
 
-export const GetSingleTestAction = id => {
+export const GetSingleTestAction = (id, grade = null) => {
   return dispatch => {
     dispatch({type: GET_SINGLE_TestS_LOADING});
 
@@ -104,6 +104,16 @@ export const GetSingleTestAction = id => {
         console.log(res);
 
         if (res.hasOwnProperty('success') && res.success == true) {
+          console.log('GRADDEEE', grade)
+          if (grade != null) {
+            console.log('GRADDEEE', res)
+            let dataTest = {
+              patient_id: res.data.patient_id,
+              grade: res.data.grade + grade,
+            };
+            console.log('dataTest: ', dataTest)
+            dispatch(EditTestAction(dataTest, res.data.id));
+          }
           dispatch({type: GET_SINGLE_TestS_SUCCESS, res});
         } else if (res.hasOwnProperty('success') && res.success == false) {
           dispatch({type: GET_SINGLE_TestS_ERROR, res});

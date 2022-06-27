@@ -40,7 +40,7 @@ export default function Test7() {
   const singleResponse = useSelector(
     state => state.miniTestReducer.getSingleMiniTestState,
   );
-  const [grade4, setGrade4] = useState(0);
+  const [grade7, setGrade7] = useState(0);
   const dispatch = useDispatch();
   let text = '';
   const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -52,9 +52,9 @@ export default function Test7() {
   const [showNextButton, setShowNextButton] = useState(false);
   const [showPlayButton, setShowPLayButton] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
-  const [result, setResult] = useState('');
+  const [result7, setResult7] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const [result5, setresult5] = useState({});
+  let result77 = [];
   let pass = true;
   let numberOfTabs = 0;
   let timeTabs = [];
@@ -67,8 +67,9 @@ export default function Test7() {
         const data = {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
-          grade: grade4,
+          grade: grade7,
         };
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade7));
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -94,9 +95,15 @@ export default function Test7() {
 
   const onSpeechResultsHandler = e => {
     let text = e.value[0];
-    setResult(text);
-    console.log('speech result handler', e, typeof e);
-    setresult5(e);
+    if (String(text)) {
+      console.log('text : ', text);
+      setResult7(text);
+      console.log('speech result handler', e, typeof e);
+      result77.push(text);
+      console.log('result87777 ', result77);
+      setResult7(result77);
+      console.log('resultttttttttttttt', result7);
+    }
   };
 
   const startRecording = async () => {
@@ -119,56 +126,55 @@ export default function Test7() {
     if (currentQuestionIndex == allQuestions.length - 1) {
       pass = true;
 
-      var id = result5.value[0];
-      var last1 = id.substr(id.length - 1);
-      var last2 = id.substr(id.length - 2);
-      var last3 = id.substr(id.length - 3);
-      console.log('id',id, last1, last2, last3)
-      if (
-        result5.value.includes(
-          allQuestions[currentQuestionIndex]?.correct_option,
-      ) {
-        console.log('result5', result5);
-        console.log(
-          'VALLUEEEE',
-          allQuestions[currentQuestionIndex]?.correct_option,
-        );
-      } else {
-        pass = false;
-      }
-      if (pass && allQuestions[currentQuestionIndex]?.graded) {
-        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade4);
-        setGrade4(grade4 + 1);
-        console.log('Grade41111111111111111111111111111111: ', grade4);
+      for (var i = 0; i < result7.length; i++) {
+        console.log('result7 in : ', result7[i]);
+        for (
+          var j = 0;
+          j < allQuestions[currentQuestionIndex]?.correct_option.length;
+          j++
+        ) {
+          var text1 = result7[i];
+          var text2 = allQuestions[currentQuestionIndex]?.correct_option[j];
+          console.log('result7[i]', text1);
+          console.log(
+            'allQuestions[currentQuestionIndex]?.correct_option[j]',
+            text2,
+          );
+          console.log(text1.includes(text2));
+          if (text1.includes(text2)) {
+            setGrade7(grade7 + 1);
+            allQuestions[currentQuestionIndex]?.correct_option.splice(j, 1);
+          }
+        }
       }
 
-      console.log('NAVIGATEEEEEEEE', grade4);
+      console.log('NAVIGATEEEEEEEE', grade7);
       dispatch(GetSingleMiniTestAction(miniTestId));
       navigation.goBack();
     } else {
       pass = true;
-
-      var id = result5.value[0];
-      var last1 = id.substr(id.length - 1);
-      var last2 = id.substr(id.length - 2);
-      var last3 = id.substr(id.length - 3);
-      console.log('id',id, last1, last2, last3)
-      if (
-        result5.value.includes(
-          allQuestions[currentQuestionIndex]?.correct_option,
-      ) {
-        console.log('result5', result5);
-        console.log(
-          'VALLUEEEE',
-          allQuestions[currentQuestionIndex]?.correct_option,
-        );
-      } else {
-        pass = false;
-      }
-      if (pass && allQuestions[currentQuestionIndex]?.graded) {
-        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade4);
-        setGrade4(grade4 + 1);
-        console.log('Grade41111111111111111111111111111111: ', grade4);
+      console.log('result7 result7', result7);
+      console.log('result7 length', result7.length);
+      for (var i = 0; i < result7.length; i++) {
+        console.log('result7 in : ', result7[i]);
+        for (
+          var j = 0;
+          j < allQuestions[currentQuestionIndex]?.correct_option.length;
+          j++
+        ) {
+          var text1 = result7[i];
+          var text2 = allQuestions[currentQuestionIndex]?.correct_option[j];
+          console.log('result7[i]', text1);
+          console.log(
+            'allQuestions[currentQuestionIndex]?.correct_option[j]',
+            text2,
+          );
+          console.log(text1.includes(text2));
+          if (text1.includes(text2)) {
+            setGrade7(grade7 + 1);
+            allQuestions[currentQuestionIndex]?.correct_option.splice(j, 1);
+          }
+        }
       }
 
       if (currentQuestionIndex != allQuestions.length - 1) {
@@ -188,22 +194,6 @@ export default function Test7() {
   const soundEffect = async () => {
     console.log('ENTERRRRR');
     if (!showNextButton) {
-      console.log(
-        'allQuestions[currentQuestionIndex]?.pattern',
-        allQuestions[currentQuestionIndex]?.pattern,
-      );
-      let sound = new Sound(
-        allQuestions[currentQuestionIndex]?.pattern + '.mp3',
-        Sound.MAIN_BUNDLE,
-        error => {
-          if (error) {
-            console.log('failed to load the sound', error);
-          } else {
-            sound.play(); // have to put the call to play() in the onload callback
-          }
-        },
-      );
-      await sleep(allQuestions[currentQuestionIndex]?.sleep);
       setShowNextButton(true);
       setShowPLayButton(true);
     }
@@ -222,18 +212,50 @@ export default function Test7() {
         }}>
         <Text
           style={{
-            fontSize: 20,
+            fontSize: 40,
             color: COLORS.secondary,
             marginBottom: '5%',
             marginTop: '5%',
           }}>
-          {text}
+          MARIE
+        </Text>
+        <Text
+          style={{
+            fontSize: 30,
+            color: COLORS.secondary,
+            marginBottom: '5%',
+            marginTop: '5%',
+          }}>
+          Marie est une petite fille. Elle ne va pas encore à l'école. En été,
+          Marie joue dans le bois avec sa maman et son papa. Marie regarde sa
+          maison, le toit rouge, la haute cheminée, la porte basse, la large
+          fenêtre.
+        </Text>
+        <Text
+          style={{
+            fontSize: 30,
+            color: COLORS.secondary,
+            marginBottom: '5%',
+            marginTop: '5%',
+          }}>
+          Parfois, la petite, Marie va faire une belle promenade dans la cour et
+          dans le grand jardin : elle joue, elle saute et court dans la prairie.
+        </Text>
+        <Text
+          style={{
+            fontSize: 30,
+            color: COLORS.secondary,
+            marginBottom: '5%',
+            marginTop: '5%',
+          }}>
+          Dans le ciel bleu, la fillette voit un gentil moineau brun; il vole
+          vers la branche du cerisier.
         </Text>
         <TextInput
-          value={result}
+          value={result7}
           placeholder="your text"
           style={{color: '#000'}}
-          onChangeText={text => setResult(text)}
+          onChangeText={text => setResult7(text)}
         />
         {renderPlayButton()}
       </View>
@@ -251,7 +273,6 @@ export default function Test7() {
               style={{
                 marginLeft: '50%',
                 marginRight: '50%',
-                marginTop: '50%',
                 width: 200,
                 height: 200,
                 justifyContent: 'center',
