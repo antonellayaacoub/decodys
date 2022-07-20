@@ -189,7 +189,6 @@ export default function Test8() {
         <View
           style={{
             width: '90%',
-            paddingHorizontal: 15,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -200,8 +199,7 @@ export default function Test8() {
             }}
             style={{
               marginTop: '50%',
-              width: 200,
-              height: 200,
+              width: '40%',
               justifyContent: 'center',
               alignItems: 'center',
               padding: 10,
@@ -216,8 +214,7 @@ export default function Test8() {
             }}
             style={{
               marginTop: '50%',
-              width: 200,
-              height: 200,
+              width: '40%',
               justifyContent: 'center',
               alignItems: 'center',
               padding: 10,

@@ -20,7 +20,7 @@ export const HttpInterceptor = (store) =>fetchIntercept.register({
 
     response: function (response) {
         // Modify the reponse object
-        console.log("status: ",response.status,"error: ", response.error);
+        console.log("status: ",response.status,"error: ", response);
         if(response.status==401)
         {
             console.log("ready to redirect");

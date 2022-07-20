@@ -36,7 +36,7 @@ import {
   DeleteMiniTestAction,
 } from '../actions/MiniTestsAction';
 
-const numberOfMeniTests = 9;
+const numberOfMeniTests = 10;
 export const CreateTestAction = credentials => {
   return dispatch => {
     dispatch({type: CREATE_Test_LOADING});

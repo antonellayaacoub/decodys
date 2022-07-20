@@ -31,7 +31,11 @@ import {
   GetSingleMiniTestAction,
   EditMiniTestAction,
 } from '../../../../store/actions/MiniTestsAction';
-
+import {
+  clearEditTestState,
+  GetSingleTestAction,
+  EditTestAction,
+} from '../../../../store/actions/TestsAction.js';
 
 export default function Test1() {
   const routeParams = useRoute();
@@ -63,6 +67,8 @@ export default function Test1() {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
           grade: grade1,
+          done:!singleResponse.data.done,
+          answers:'{"1":"mm"}',
         };
         dispatch(GetSingleTestAction(singleResponse.data.test_id, grade1));
         dispatch(EditMiniTestAction(data, miniTestId));
@@ -73,7 +79,7 @@ export default function Test1() {
   const handleNext = () => {
     if (currentQuestionIndex == allQuestions.length - 1) {
       pass = true;
-     
+
       if (numberOfTabs == allQuestions[currentQuestionIndex]?.correct_option) {
         for (var i = 2; i < intervalTabs.length; i++) {
           if (i % 2 === 0) {
@@ -83,18 +89,21 @@ export default function Test1() {
               allQuestions[currentQuestionIndex]?.pattern[i],
             );
             console.log('user tabs', intervalTabs[i]);
-            console.log(allQuestions[currentQuestionIndex]?.pattern[i])
+            console.log(allQuestions[currentQuestionIndex]?.pattern[i]);
             if (allQuestions[currentQuestionIndex]?.pattern[i] == 5000) {
-              console.log('in 5000',allQuestions[currentQuestionIndex]?.pattern[i])
-              if (intervalTabs[i] < 1500) { 
+              console.log(
+                'in 5000',
+                allQuestions[currentQuestionIndex]?.pattern[i],
+              );
+              if (intervalTabs[i] < 1500) {
                 console.log('FALSEEEEE');
                 pass = false;
-              } 
+              }
             }
           }
         }
       } else {
-        console.log('WORNGGGG TABS')
+        console.log('WORNGGGG TABS');
         pass = false;
       }
       if (pass && allQuestions[currentQuestionIndex]?.graded) {
@@ -108,7 +117,7 @@ export default function Test1() {
       navigation.goBack();
     } else {
       pass = true;
-    
+
       if (numberOfTabs == allQuestions[currentQuestionIndex]?.correct_option) {
         for (var i = 2; i < intervalTabs.length; i++) {
           if (i % 2 === 0) {

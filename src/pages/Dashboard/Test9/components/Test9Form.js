@@ -33,6 +33,11 @@ import {
   GetSingleMiniTestAction,
   EditMiniTestAction,
 } from '../../../../store/actions/MiniTestsAction';
+import {
+  clearEditTestState,
+  GetSingleTestAction,
+  EditTestAction,
+} from '../../../../store/actions/TestsAction.js';
 export default function Test9() {
   const routeParams = useRoute();
   const {miniTestId} = routeParams.params;
@@ -54,7 +59,7 @@ export default function Test9() {
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [result, setResult] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [result9, setResult9] = useState({});
+  const [result9, setResult9] = useState({value:" "});
   let pass = true;
   let numberOfTabs = 0;
   let timeTabs = [];
@@ -64,12 +69,15 @@ export default function Test9() {
   useEffect(() => {
     if (singleResponse != '' || singleResponse != 'loading') {
       if (singleResponse.hasOwnProperty('data')) {
+        console.log('NEW GRADE: ', grade9 , "old", singleResponse.data.grade, 'final', grade9 - singleResponse.data.grade)
         const data = {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
           grade: grade9,
+          done:!singleResponse.data.done,
+          answers:'{"1":"mm"}',
         };
-        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade9));
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade9 - singleResponse.data.grade));
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -95,9 +103,11 @@ export default function Test9() {
 
   const onSpeechResultsHandler = e => {
     let text = e.value[0];
+    if (String(text)) {
     setResult(text);
     console.log('speech result handler', e, typeof e);
     setResult9(e);
+    }
   };
 
   const startRecording = async () => {

@@ -26,7 +26,7 @@ export default function Header() {
             }
             </Left>
           <Body>
-            <Title>Test3</Title>
+            <Title>JUGEMENT DE RIMES</Title>
           </Body>
           <Right>
             <Options/>

@@ -26,7 +26,7 @@ export default function Header() {
             }
             </Left>
           <Body>
-            <Title>Test4</Title>
+            <Title>INVERSION SYLLABIQUE</Title>
           </Body>
           <Right>
             <Options/>

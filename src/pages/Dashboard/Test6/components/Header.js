@@ -26,7 +26,7 @@ export default function Header() {
             }
             </Left>
           <Body>
-            <Title>Test6</Title>
+            <Title>MOTS</Title>
           </Body>
           <Right>
             <Options/>

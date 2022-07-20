@@ -26,7 +26,7 @@ export default function Header() {
             }
             </Left>
           <Body>
-            <Title>Test8</Title>
+            <Title>JUGEMENT DE RIMES AR</Title>
           </Body>
           <Right>
             <Options/>

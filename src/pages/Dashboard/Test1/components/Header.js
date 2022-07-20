@@ -26,7 +26,7 @@ export default function Header() {
             }
             </Left>
           <Body>
-            <Title>Test1</Title>
+            <Title>REPRODUCTION DE RYTHME AUDITIF</Title>
           </Body>
           <Right>
             <Options/>

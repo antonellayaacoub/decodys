@@ -26,7 +26,7 @@ export default function Header() {
             }
             </Left>
           <Body>
-            <Title>Test2</Title>
+            <Title>REPETITION DE CHIFFRES</Title>
           </Body>
           <Right>
             <Options/>

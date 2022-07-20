@@ -33,6 +33,11 @@ import {
   GetSingleMiniTestAction,
   EditMiniTestAction,
 } from '../../../../store/actions/MiniTestsAction';
+import {
+  clearEditTestState,
+  GetSingleTestAction,
+  EditTestAction,
+} from '../../../../store/actions/TestsAction.js';
 export default function Test7() {
   const routeParams = useRoute();
   const {miniTestId} = routeParams.params;
@@ -52,6 +57,7 @@ export default function Test7() {
   const [showNextButton, setShowNextButton] = useState(false);
   const [showPlayButton, setShowPLayButton] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
+  const [result, setResult] = useState([])
   const [result7, setResult7] = useState([]);
   const [isLoading, setLoading] = useState(false);
   let result77 = [];
@@ -97,7 +103,7 @@ export default function Test7() {
     let text = e.value[0];
     if (String(text)) {
       console.log('text : ', text);
-      setResult7(text);
+      setResult(text);
       console.log('speech result handler', e, typeof e);
       result77.push(text);
       console.log('result87777 ', result77);
@@ -251,11 +257,20 @@ export default function Test7() {
           Dans le ciel bleu, la fillette voit un gentil moineau brun; il vole
           vers la branche du cerisier.
         </Text>
+        <Text
+          style={{
+            fontSize: 30,
+            color: COLORS.secondary,
+            marginBottom: '5%',
+            marginTop: '5%',
+          }}>
+         1) Où Marie avait-elle jouée? Avec qui ?
+        </Text>
         <TextInput
-          value={result7}
+          value={result}
           placeholder="your text"
           style={{color: '#000'}}
-          onChangeText={text => setResult7(text)}
+          onChangeText={text => setResult(text)}
         />
         {renderPlayButton()}
       </View>

@@ -261,6 +261,7 @@ android {
 
 dependencies {
      implementation project(':@react-native-voice_voice')
+     implementation project(':react-native-audio-recorder-player')
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     //noinspection GradleDynamicVersion

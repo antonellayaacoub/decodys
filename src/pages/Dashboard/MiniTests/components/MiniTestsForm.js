@@ -121,6 +121,34 @@ export default function ItemList() {
   };
 
   const renderItem = (item, index) => {
+    let name = item.name;
+    if (item.name == 'Test1') {
+      name = 'REPRODUCTION DE RYTHME AUDITIF';
+    } else if (item.name == 'Test2') {
+      name = 'REPETITION DE CHIFFRES';
+    }
+    else if (item.name == 'Test3') {
+      name = 'JUGEMENT DE RIMES';
+    }
+    else if (item.name == 'Test4') {
+      name = 'PRODUCTION DE RIMES';
+    }
+    else if (item.name == 'Test5') {
+      name = 'INVERSION SYLLABIQUE';
+    }
+    else if (item.name == 'Test6') {
+      name = 'MOTS';
+    }
+    else if (item.name == 'Test7') {
+      name = 'TEXT';
+    }
+    else if (item.name == 'Test8') {
+      name = 'JUGEMENT DE RIMES AR';
+    }
+    else if (item.name == 'Test9') {
+      name = 'PRODUCTION DE RIMES AR';
+    }
+    
     return (
       <DecodysButton
         buttonFunction={e =>
@@ -129,7 +157,7 @@ export default function ItemList() {
           })
         }
         bgcolor="#fff"
-        text={item.name}
+        text={name}
         color={'#0ACBC5'}
         outline={true}
       />
@@ -152,10 +180,9 @@ export default function ItemList() {
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: 'center',
-          marginLeft:'10%',
-          marginTop:20,
+          marginLeft: '10%',
+          marginTop: 20,
           width: '80%',
-          
         }}>
         {(responseData == '' || responseData == 'loading') && initPager == 1 ? (
           loadAnimation()

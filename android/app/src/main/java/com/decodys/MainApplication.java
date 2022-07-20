@@ -13,6 +13,7 @@ import com.decodys.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.wenkesj.voice.VoicePackage;
+import com.dooboolab.audiorecorderplayer.RNAudioRecorderPlayerPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -29,7 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           // packages.add(new VoicePackage());
-        
+        //packages.add(new RNAudioRecorderPlayerPackage());
           return packages;
         }
 

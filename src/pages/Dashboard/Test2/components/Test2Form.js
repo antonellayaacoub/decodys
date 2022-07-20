@@ -33,6 +33,11 @@ import {
   GetSingleMiniTestAction,
   EditMiniTestAction,
 } from '../../../../store/actions/MiniTestsAction';
+import {
+  clearEditTestState,
+  GetSingleTestAction,
+  EditTestAction,
+} from '../../../../store/actions/TestsAction.js';
 export default function Test2() {
   const routeParams = useRoute();
   const {miniTestId} = routeParams.params;

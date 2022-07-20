@@ -31,9 +31,7 @@ export default function PatientDetails() {
 
   const dispatch = useDispatch();
 
-  const singleResponse = useSelector(
-    state => state.PatientReducer.getSinglePatientState,
-  );
+  const singleResponse = useSelector(state=>state.patientReducer.getSinglePatientState);
 
   const route = useRoute();
 
