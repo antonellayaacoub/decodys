@@ -59,7 +59,8 @@ export default function Test2() {
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [result, setResult] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [result2, setResult2] = useState({});
+  const [result2, setResult2] = useState({value: ' '});
+  const [answer, setAnswer] = useState([]);
   let pass = true;
   let numberOfTabs = 0;
   let timeTabs = [];
@@ -73,8 +74,16 @@ export default function Test2() {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
           grade: grade2,
+          done: true,
+          answers: answer,
         };
-        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade2));
+        dispatch(
+          GetSingleTestAction(
+            singleResponse.data.test_id,
+            grade2,
+            singleResponse.data.grade
+          ),
+        );
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -100,9 +109,11 @@ export default function Test2() {
 
   const onSpeechResultsHandler = e => {
     let text = e.value[0];
-    setResult(text);
-    console.log('speech result handler', e, typeof e);
-    setResult2(e);
+    if (String(text)) {
+      setResult(text);
+      console.log('speech result handler', e, typeof e);
+      setResult2(e);
+    }
   };
 
   const startRecording = async () => {
@@ -173,6 +184,7 @@ export default function Test2() {
         console.log('CHANGE TABS');
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       }
+
       Animated.timing(progress, {
         toValue: currentQuestionIndex + 1,
         duration: 1000,
@@ -182,12 +194,15 @@ export default function Test2() {
       setShowNextButton(false);
       setShowPLayButton(false);
     }
+    if (allQuestions[currentQuestionIndex]?.graded) {
+      setAnswer([...answer, pass]);
+    }
   };
   const soundEffect = async () => {
     console.log('ENTERRRRR');
     if (!showNextButton) {
       let sound = new Sound(
-        allQuestions[currentQuestionIndex]?.pattern + '.mp3',
+        allQuestions[currentQuestionIndex]?.pattern + '.ogg',
         Sound.MAIN_BUNDLE,
         error => {
           if (error) {
@@ -278,8 +293,8 @@ export default function Test2() {
           </Text>
         </TouchableOpacity>
       );
-    } else{
-        return null;
+    } else {
+      return null;
     }
   };
 

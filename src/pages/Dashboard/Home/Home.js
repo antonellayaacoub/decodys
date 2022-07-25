@@ -20,7 +20,7 @@ import Test7 from '../Test7';
 import Test8 from '../Test8';
 import Test9 from '../Test9';
 import Test10 from '../Test10';
-// import Test11 from '../Test11';
+import Test11 from '../Test11';
 import {HttpInterceptor} from '../../../HttpInterceptor';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -125,7 +125,7 @@ export default function Home() {
         <Stack.Screen name="Test8" component={Test8} />
         <Stack.Screen name="Test9" component={Test9} />
         <Stack.Screen name="Test10" component={Test10} />
-        {/* <Stack.Screen name="Test11" component={Test11} /> */}
+        <Stack.Screen name="Test11" component={Test11} />
         <Stack.Screen name="ViewSingleTest" component={ViewSingleTest} />
       </Stack.Navigator>
     </>

@@ -96,7 +96,7 @@ export default function Test7() {
     let text = e.value[0];
     setResult(text);
     console.log('speech result handler', e, typeof e);
-    setresult7(e);
+    setResult7(e);
   };
 
   const startRecording = async () => {

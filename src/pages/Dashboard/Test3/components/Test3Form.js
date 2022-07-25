@@ -63,6 +63,7 @@ export default function Test3() {
   const [result, setResult] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [tab, setTab] = useState(false);
+  const [answer, setAnswer] = useState([]);
   let pass = true;
   let numberOfTabs = 0;
   let timeTabs = [];
@@ -77,8 +78,10 @@ export default function Test3() {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
           grade: grade3,
+          done: true,
+          answers: answer,
         };
-        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade3));
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade3,singleResponse.data.grade));
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -136,6 +139,9 @@ export default function Test3() {
 
       setShowNextButton(false);
       setShowPLayButton(false);
+    }
+    if (allQuestions[currentQuestionIndex]?.graded) {
+      setAnswer([...answer, pass]);
     }
   };
   const soundEffect = async () => {

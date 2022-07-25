@@ -148,7 +148,13 @@ export default function ItemList() {
     else if (item.name == 'Test9') {
       name = 'PRODUCTION DE RIMES AR';
     }
-    
+    else if (item.name == 'Test10') {
+      name = 'COMPTAGE SYLLABIQUE';
+    }
+    else if (item.name == 'Test11') {
+      name = 'IDENTIFICATION DE LA SYLLABLE COMMUNE';
+    }
+    if(item.done){
     return (
       <DecodysButton
         buttonFunction={e =>
@@ -161,7 +167,22 @@ export default function ItemList() {
         color={'#0ACBC5'}
         outline={true}
       />
-    );
+    );}
+    else{
+      return (
+        <DecodysButton
+          buttonFunction={e =>
+            navigation.navigate(item.name, {
+              miniTestId: item.id,
+            })
+          }
+          bgcolor="#0ACBC5"
+          text={name}
+          color={'#fff'}
+          outline={false}
+        />
+      );
+    }
   };
 
   const renderFooter = () => {

@@ -2,18 +2,16 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  Title,
   StatusBar,
   StyleSheet,
   Image,
   TouchableOpacity,
-  TextInput,
   ScrollView,
   SafeAreaView,
   Animated,
   Modal,
   ActivityIndicator,
-  Button,
+  TextInput,
 } from 'react-native';
 import DecodysButton from '../../../../Components/DecodysButton';
 import {Overlay} from 'react-native-elements';
@@ -24,10 +22,9 @@ import {
 } from '@react-navigation/native';
 import {styles} from '../styles';
 import {COLORS, SIZES} from '../../../../constants';
-import data from '../../../../data/Test9Data';
+import data from '../../../../data/Test10Data';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Voice from '@react-native-voice/voice';
 import Sound from 'react-native-sound';
 import {useSelector, useDispatch} from 'react-redux';
 import {
@@ -40,101 +37,230 @@ import {
   GetSingleTestAction,
   EditTestAction,
 } from '../../../../store/actions/TestsAction.js';
-import axios from 'axios';
-import AudioRecord from 'react-native-audio-record';
-import * as RNFS from 'react-native-fs';
 export default function Test10() {
-  const options = {
-    sampleRate: 16000, // default 44100
-    channels: 1, // 1 or 2, default 1
-    bitsPerSample: 16, // 8 or 16, default 16
-    audioSource: 6, // android only (see below)
-    wavFile: 'test.wav', // default 'audio.wav'
+  const routeParams = useRoute();
+  const {miniTestId} = routeParams.params;
+  const navigation = useNavigation();
+  const singleResponse = useSelector(
+    state => state.miniTestReducer.getSingleMiniTestState,
+  );
+  const [grade10, setGrade10] = useState(0);
+  const dispatch = useDispatch();
+  let text = '';
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const allQuestions = data;
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentOptionSelected, setCurrentOptionSelected] = useState(null);
+  const [correctOption, setCorrectOption] = useState(null);
+  const [isOptionsDisabled, setIsOptionsDisabled] = useState(false);
+  const [showNextButton, setShowNextButton] = useState(false);
+  const [showPlayButton, setShowPLayButton] = useState(false);
+  const [showScoreModal, setShowScoreModal] = useState(false);
+  const [result, setResult] = useState('');
+  const [isLoading, setLoading] = useState(false);
+  const [result2, setResult2] = useState({});
+  let pass = true;
+  let numberOfTabs = 0;
+  let timeTabs = [];
+  let intervalTabs = [];
+  Sound.setCategory('Playback');
+
+  useEffect(() => {
+    if (singleResponse != '' || singleResponse != 'loading') {
+      if (singleResponse.hasOwnProperty('data')) {
+        const data = {
+          test_id: singleResponse.data.test_id,
+          name: singleResponse.data.name,
+          grade: grade10,
+        };
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade10));
+        dispatch(EditMiniTestAction(data, miniTestId));
+      }
+    }
+  }, [singleResponse]);
+
+  
+
+  const handleNext = () => {
+    if (currentQuestionIndex == allQuestions.length - 1) {
+      pass = true;
+
+      if (result == allQuestions[currentQuestionIndex]?.correct_option) {
+        console.log('result', result);
+        console.log(
+          'VALLUEEEE',
+          allQuestions[currentQuestionIndex]?.correct_option,
+        );
+      } else {
+        pass = false;
+      }
+      if (pass) {
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade10);
+        setGrade10(grade10 + 1);
+        console.log('Grade101111111111111111111111111111111: ', grade10);
+      }
+
+      console.log('NAVIGATEEEEEEEE', grade10);
+      dispatch(GetSingleMiniTestAction(miniTestId));
+      navigation.goBack();
+    } else {
+      pass = true;
+
+      if (result == allQuestions[currentQuestionIndex]?.correct_option) {
+        console.log('result', result);
+        console.log(
+          'VALLUEEEE',
+          allQuestions[currentQuestionIndex]?.correct_option,
+        );
+      } else {
+        pass = false;
+      }
+      if (pass) {
+        console.log('GradeEEEEEEEEEEEEEEEE previous: ', grade10);
+        setGrade10(grade10 + 1);
+        console.log('Grade101111111111111111111111111111111: ', grade10);
+      }
+
+      if (currentQuestionIndex != allQuestions.length - 1) {
+        console.log('CHANGE TABS');
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }
+      Animated.timing(progress, {
+        toValue: currentQuestionIndex + 1,
+        duration: 1000,
+        useNativeDriver: false,
+      }).start();
+
+      setShowNextButton(false);
+      setShowPLayButton(false);
+    }
+  };
+  const soundEffect = async () => {
+    console.log('ENTERRRRR');
+    if (!showNextButton) {
+      let sound = new Sound(
+        allQuestions[currentQuestionIndex]?.pattern + '.mp3',
+        Sound.MAIN_BUNDLE,
+        error => {
+          if (error) {
+            console.log('failed to load the sound', error);
+          } else {
+            sound.play(); // have to put the call to play() in the onload callback
+          }
+        },
+      );
+      await sleep(allQuestions[currentQuestionIndex]?.sleep);
+      setShowNextButton(true);
+      setShowPLayButton(true);
+    }
+  };
+  const renderOptions = () => {
+    soundEffect();
+    return (
+      <View
+        style={{
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        {renderPlayButton()}
+      </View>
+    );
+  };
+  const renderPlayButton = () => {
+    if (showPlayButton) {
+      return (
+        <>
+          <TextInput
+            placeholder="Enter your Result"
+            keyboardType="numeric"
+            onChangeText={text => setResult(text)}
+          />
+        </>
+      );
+    } else {
+      return null;
+    }
+  };
+  const renderNextButton = () => {
+    if (showNextButton) {
+      return (
+        <TouchableOpacity
+          onPress={handleNext}
+          style={{
+            position: 'absolute',
+            bottom: 40,
+            right: 40,
+            width: '30%',
+            backgroundColor: COLORS.primary,
+            padding: 20,
+            borderRadius: 25,
+          }}>
+          <Text
+            style={{fontSize: 20, color: COLORS.white, textAlign: 'center'}}>
+            Next
+          </Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return null;
+    }
   };
 
-  AudioRecord.init(options);
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
-  const startRecord = async () => {
-    console.log('1');
-    AudioRecord.start();
-    await sleep(1000);
-    console.log('2');
-    stopRecord();
-  };
-  const stopRecord = async () => {
-    // or to get the wav file path
-    AudioRecord.stop().then(r => {
-      RNFS.readFile(r, 'base64') // r is the path to the .wav file on the phone
-        .then(async data => {
-          // console.log(typeof uploaded_file);
-          console.log('3');
-          const config = {
-            headers: {
-              accept: 'application/json',
-              'Content-Type': 'multipart/form-data',
+  const [progress, setProgress] = useState(new Animated.Value(0));
+  const progressAnim = progress.interpolate({
+    inputRange: [0, allQuestions.length - 1],
+    outputRange: ['0%', '100%'],
+  });
+  const renderProgressBar = () => {
+    return (
+      <View
+        style={{
+          width: '100%',
+          height: 20,
+          borderRadius: 20,
+          backgroundColor: '#00000020',
+        }}>
+        <Animated.View
+          style={[
+            {
+              height: 20,
+              borderRadius: 20,
+              backgroundColor: COLORS.primary,
             },
-          };
-          let formdata = new FormData();
-          formdata.append('uploaded_file', {
-            uri: 'file://' +r,
-            type: 'audio/wav',
-            name: 'test'
-          });
-          console.log(r);
-          const response = await axios
-            .post(
-              `http://192.168.1.5:5000/net/voice/prediction/`,
-              formdata,
-              config,
-             
-            )
-            .then(response => response)
-            .then(result => console.log('RESULT: ',  result.request._response))
-            .catch(error => {
-              console.log('error', error);
-             
-            });
-        });
-    });
+            {
+              width: progressAnim,
+            },
+          ]}></Animated.View>
+      </View>
+    );
   };
-  // fetch('http://localhost:5000/net/voice/prediction/', {
-  //   // Your POST endpoint
-  //   method: 'POST',
-  //   headers: {
-  //     // Content-Type may need to be completely **omitted**
-  //     // or you may need something
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: uploaded_file, // This is your file object
-  // })
-  // .then(
-  //   response => response.json(), // if the response is a JSON object
-  // )
-  // .then(
-  //   success => console.log('SUCCCESSS',success), // Handle the success response object
-  // )
-  // .catch(
-  //   error => console.log('ERROOORRR: ',error), // Handle the error response object
-  // );
-  //}
+
   return (
-    <>
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}>
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <View
         style={{
           flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
-          alignContent: 'center',
-          alignSelf: 'center',
+          paddingVertical: 40,
+          paddingHorizontal: 16,
+          backgroundColor: COLORS.background,
+          position: 'relative',
         }}>
-        <Button
-          title="StartRecord"
-          mode="contained"
-          icon="record"
-          onPress={() => startRecord()}>
-          RECORD
-        </Button>
+        {/* ProgressBar */}
+        {renderProgressBar()}
+
+        {/* Options */}
+        {renderOptions()}
+
+        {/* Next Button */}
+        {renderNextButton()}
+
+        {/* Score Modal */}
       </View>
-    </>
+    </SafeAreaView>
   );
 }

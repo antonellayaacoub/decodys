@@ -51,6 +51,7 @@ export default function Test1() {
   const [correctOption, setCorrectOption] = useState(null);
   const [showNextButton, setShowNextButton] = useState(false);
   const [showPlayButton, setShowPLayButton] = useState(false);
+  const [answer, setAnswer] = useState([]);
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   let pass = true;
   let numberOfTabs = 0;
@@ -67,10 +68,10 @@ export default function Test1() {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
           grade: grade1,
-          done:!singleResponse.data.done,
-          answers:'{"1":"mm"}',
+          done:true,
+          answers: answer,
         };
-        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade1));
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade1,singleResponse.data.grade));
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -155,6 +156,9 @@ export default function Test1() {
       }).start();
       setShowNextButton(false);
       setShowPLayButton(false);
+    }
+    if (allQuestions[currentQuestionIndex]?.graded) {
+      setAnswer([...answer, pass]);
     }
   };
 

@@ -36,7 +36,7 @@ import {
   DeleteMiniTestAction,
 } from '../actions/MiniTestsAction';
 
-const numberOfMeniTests = 10;
+const numberOfMeniTests = 11;
 export const CreateTestAction = credentials => {
   return dispatch => {
     dispatch({type: CREATE_Test_LOADING});
@@ -95,7 +95,7 @@ export const GetTestActions = (id, patientId) => {
   };
 };
 
-export const GetSingleTestAction = (id, grade = null) => {
+export const GetSingleTestAction = (id, grade = null,old_grade=0) => {
   return dispatch => {
     dispatch({type: GET_SINGLE_TestS_LOADING});
 
@@ -109,7 +109,7 @@ export const GetSingleTestAction = (id, grade = null) => {
             console.log('GRADDEEE', res)
             let dataTest = {
               patient_id: res.data.patient_id,
-              grade: res.data.grade + grade,
+              grade: res.data.grade + grade-old_grade,
             };
             console.log('dataTest: ', dataTest)
             dispatch(EditTestAction(dataTest, res.data.id));

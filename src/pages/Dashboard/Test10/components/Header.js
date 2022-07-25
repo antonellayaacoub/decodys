@@ -26,7 +26,7 @@ export default function Header() {
             }
             </Left>
           <Body>
-            <Title>Test10</Title>
+            <Title>COMPTAGE SYLLABIQUE</Title>
           </Body>
           <Right>
             <Options/>

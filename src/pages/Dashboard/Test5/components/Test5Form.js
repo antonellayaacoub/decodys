@@ -59,7 +59,8 @@ export default function Test5() {
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [result, setResult] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [result5, setresult5] = useState({});
+  const [result5, setResult5] = useState({value: ' '});
+  const [answer, setAnswer] = useState([]);
   let pass = true;
   let numberOfTabs = 0;
   let timeTabs = [];
@@ -73,8 +74,10 @@ export default function Test5() {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
           grade: grade5,
+          done: true,
+          answers: answer,
         };
-        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade5));
+        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade5,singleResponse.data.grade));
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -100,9 +103,11 @@ export default function Test5() {
 
   const onSpeechResultsHandler = e => {
     let text = e.value[0];
+    if (String(text)) {
     setResult(text);
     console.log('speech result handler', e, typeof e);
-    setresult5(e);
+    setResult5(e);
+    }
   };
 
   const startRecording = async () => {
@@ -183,6 +188,9 @@ export default function Test5() {
 
       setShowNextButton(false);
       setShowPLayButton(false);
+    }
+    if (allQuestions[currentQuestionIndex]?.graded) {
+      setAnswer([...answer, pass]);
     }
   };
   const soundEffect = async () => {

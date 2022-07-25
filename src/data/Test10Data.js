@@ -1,15 +1,128 @@
 export default data = [
-    {
-      pattern: 'test9_1',
-      correct_option: ['eau','o','au'],
-      sleep:2000,
-      graded:false,
-    },
-    {
-      pattern: 'test9_2',
-      correct_option: ['on'],
-      sleep:2000,
-      graded:true,
-    },
-   
-  ];
+  {
+    pattern: 'test10_1',
+    correct_option: 2,
+    sleep: 2000,
+    graded: false,
+  },
+  {
+    pattern: 'test10_2',
+    correct_option: 3,
+    sleep: 2000,
+    graded: false,
+  },
+  {
+    pattern: 'test10_3',
+    correct_option: 1,
+    sleep: 2000,
+    graded: false,
+  },
+  {
+    pattern: 'test10_4',
+    correct_option: 3,
+    sleep: 2000,
+    graded: false,
+  },
+  {
+    pattern: 'test10_5',
+    correct_option: 1,
+    sleep: 2000,
+    graded: false,
+  },
+  {
+    pattern: 'test10_6',
+    correct_option: 2,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_7',
+    correct_option: 1,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_8',
+    correct_option: 3,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_9',
+    correct_option: 2,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_10',
+    correct_option: 4,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_11',
+    correct_option: 1,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_12',
+    correct_option: 3,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_13',
+    correct_option: 1,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_14',
+    correct_option: 2,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_15',
+    correct_option: 3,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_16',
+    correct_option: 3,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_17',
+    correct_option: 2,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_18',
+    correct_option: 4,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_19',
+    correct_option: 3,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_20',
+    correct_option: 3,
+    sleep: 2000,
+    graded: true,
+  },
+  {
+    pattern: 'test10_21',
+    correct_option: 4,
+    sleep: 2000,
+    graded: true,
+  },
+];

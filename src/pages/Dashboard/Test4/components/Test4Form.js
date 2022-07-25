@@ -59,7 +59,8 @@ export default function Test4() {
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [result, setResult] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [result4, setResult4] = useState({});
+  const [result4, setResult4] = useState({value: ' '});
+  const [answer, setAnswer] = useState([]);
   let pass = true;
   let numberOfTabs = 0;
   let timeTabs = [];
@@ -73,8 +74,16 @@ export default function Test4() {
           test_id: singleResponse.data.test_id,
           name: singleResponse.data.name,
           grade: grade4,
+          done: true,
+          answers: answer,
         };
-        dispatch(GetSingleTestAction(singleResponse.data.test_id, grade4));
+        dispatch(
+          GetSingleTestAction(
+            singleResponse.data.test_id,
+            grade4,
+            singleResponse.data.grade,
+          ),
+        );
         dispatch(EditMiniTestAction(data, miniTestId));
       }
     }
@@ -100,9 +109,11 @@ export default function Test4() {
 
   const onSpeechResultsHandler = e => {
     let text = e.value[0];
-    setResult(text);
-    console.log('speech result handler', e, typeof e);
-    setResult4(e);
+    if (String(text)) {
+      setResult(text);
+      console.log('speech result handler', e, typeof e);
+      setResult4(e);
+    }
   };
 
   const startRecording = async () => {
@@ -129,7 +140,7 @@ export default function Test4() {
       var last1 = id.substr(id.length - 1);
       var last2 = id.substr(id.length - 2);
       var last3 = id.substr(id.length - 3);
-      console.log('id',id, last1, last2, last3)
+      console.log('id', id, last1, last2, last3);
       if (
         allQuestions[currentQuestionIndex]?.correct_option.includes(last1) ||
         allQuestions[currentQuestionIndex]?.correct_option.includes(last2) ||
@@ -159,7 +170,7 @@ export default function Test4() {
       var last1 = id.substr(id.length - 1);
       var last2 = id.substr(id.length - 2);
       var last3 = id.substr(id.length - 3);
-      console.log('id',id, last1, last2, last3)
+      console.log('id', id, last1, last2, last3);
       if (
         allQuestions[currentQuestionIndex]?.correct_option.includes(last1) ||
         allQuestions[currentQuestionIndex]?.correct_option.includes(last2) ||
@@ -191,6 +202,9 @@ export default function Test4() {
 
       setShowNextButton(false);
       setShowPLayButton(false);
+    }
+    if (allQuestions[currentQuestionIndex]?.graded) {
+      setAnswer([...answer, pass]);
     }
   };
   const soundEffect = async () => {
